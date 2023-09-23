@@ -1,0 +1,83 @@
+/* Navbar Custom Styles */
+
+/* Black background for navbar */
+.navbar.bg-light {
+    background-color: #000000 !important;
+}
+
+/* White text with bold weight for brand and links */
+.navbar-light .navbar-brand,
+.navbar-light .navbar-nav .nav-link {
+    color: #FFFFFF !important;
+    font-weight: bold;  /* Makes the text thicker */
+}
+
+/* Nice red text for hover and active effects on links with a gradual transition */
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link.active {
+    color: #8B0000 !important;
+    transition: color 0.3s;  /* Gradual color change on hover */
+}
+
+/* Light grey toggler icon */
+.navbar-light .navbar-toggler-icon {
+    background-color: #EDEDED !important;
+}
+
+/* Footer Custom Styles */
+
+/* Footer Custom Styles */
+
+/* Black background for footer */
+footer.bg-light {
+    background-color: #000000 !important;
+}
+
+/* White and bold text for footer content */
+footer .container h5,
+footer .container p,
+footer .container a {
+    color: #FFFFFF !important;
+    font-weight: bold;
+}
+
+/* Red color for hover effects on footer links with a smooth transition */
+footer .container a:hover {
+    color: #8B0000 !important;
+    text-decoration: none !important;
+    transition: color 0.3s ease;
+}
+
+/* Increase spacing between social media links */
+footer .container a {
+    margin-right: 20px !important;
+}
+
+/* Adjust footer title (h5) for better visibility if needed */
+footer .container h5 {
+    padding: 5px 10px;
+    margin-bottom: 15px;
+}
+
+
+
+.navbar.bg-light {
+    background-color: #000000 !important;
+    padding: 15px 0 !important;  /* Increased vertical padding to make the navbar taller */
+}
+
+/* White text with increased size and bold weight for brand and links */
+.navbar-light .navbar-brand,
+.navbar-light .navbar-nav .nav-link {
+    color: #FFFFFF !important;
+    font-weight: bold; 
+    font-size: 1.2rem;  /* Adjust this value to control the size of the text */
+}
+
+.navbar-light .navbar-nav .nav-link {
+    margin-left: 20px !important; /* Adjust as necessary */
+    margin-right: 20px !important; /* Adjust as necessary */
+    /* ... other styles ... */
+}
+

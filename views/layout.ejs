@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dirtbike Customization</title>
+
+    <!-- Link Bootstrap CSS from node_modules -->
+    <link rel="stylesheet" href="/static/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles.css">  <!-- Custom CSS -->
+
+</head>
+
+<body>
+
+    <!-- Include Navbar -->
+    <%- include('partials/navbar') %>
+
+    <!-- Content will be injected here -->
+    <%- body %>
+
+    <!-- Include Footer -->
+    <%- include('partials/footer') %>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="/static/jquery/dist/jquery.min.js"></script>
+    <script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
