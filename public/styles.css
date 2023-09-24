@@ -1,4 +1,7 @@
 /* Navbar Custom Styles */
+body {
+    background-color: #000000;
+}
 
 /* Black background for navbar */
 .navbar.bg-light {
@@ -27,17 +30,22 @@
 
 /* Footer Custom Styles */
 
-/* Footer Custom Styles */
+footer .logo-container {
+    text-align: center;
+    margin-bottom: 20px; /* Adjust this value for spacing below the logo */
+}
 
-/* Black background for footer */
+/* Black background for footer with a red top border */
 footer.bg-light {
     background-color: #000000 !important;
+    border-top: 1px solid #8B0000;
 }
 
 /* White and bold text for footer content */
 footer .container h5,
 footer .container p,
-footer .container a {
+footer .container a,
+footer .container h6 {  /* Add the h6 tag here */
     color: #FFFFFF !important;
     font-weight: bold;
 }
@@ -55,12 +63,26 @@ footer .container a {
 }
 
 /* Adjust footer title (h5) for better visibility if needed */
-footer .container h5 {
+footer .container h5, footer .container h6 {  /* Adjust for h6 as well */
     padding: 5px 10px;
     margin-bottom: 15px;
 }
 
+/* Adjust footer titles (h5 and h6) for better visibility */
+footer .container h5, footer .container h6 {
+    padding: 5px 0;  /* Set horizontal padding to 0 */
+    margin-bottom: 15px;  /* Remove margin-bottom to allow control through the content below */
+}
 
+/* Adjust space for quick links list */
+footer .container ul.list-unstyled {
+    margin-top: 5px;  /* Adjust this value to control the space between the title and the first list item */
+}
+
+/* Additional adjustments if needed */
+footer .container ul.list-unstyled li {
+    list-style-type: none; /* Removes bullet points */
+}
 
 .navbar.bg-light {
     background-color: #000000 !important;
@@ -81,3 +103,142 @@ footer .container h5 {
     /* ... other styles ... */
 }
 
+
+
+/* Contact Form Custom Styles */
+
+/* Black background for the contact section container */
+.container.mt-5 {
+    background-color: #000000;
+    padding: 20px 0;
+    border-radius: 10px;  /* Rounded corners */
+}
+
+/* White and bold text for headings */
+.container.mt-5 h2 {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+/* White and bold text for contact details */
+.container.mt-5 p {
+    color: #FFFFFF;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Style the labels with white text and increased spacing */
+.container.mt-5 .form-group label {
+    color: #FFFFFF;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Add some spacing to form groups for better readability */
+.container.mt-5 .form-group {
+    margin-bottom: 20px;
+}
+
+/* Style the input fields with black background and white text */
+.container.mt-5 .form-control {
+    background-color: #2b2b2b;  /* Slightly lighter black to differentiate */
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF;  /* White border for the inputs */
+}
+
+/* Change the border color when input fields are focused */
+.container.mt-5 .form-control:focus {
+    border-color: #8B0000;  /* Use the red from the navbar for focus */
+    box-shadow: none;  /* Remove default browser outline */
+}
+
+/* Style the submit button */
+.container.mt-5 .btn.btn-primary {
+    background-color: #8B0000;
+    border: none;
+}
+
+.container.mt-5 .btn.btn-primary:hover {
+    background-color: #5a0000;  /* Darken the red a bit on hover */
+}
+
+/* Style the feedback messages */
+.container.mt-5 p {
+    color: #8B0000;  /* Error message in the red */
+}
+
+.container.mt-5 p.success {
+    color: #00aa00;  /* Success message in green */
+}
+
+.homepage-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000000;  /* Black background for contrast */
+    height: 100vh;  /* Full screen height */
+}
+
+.content {
+    flex: 2;  /* This will take 2/3 of the available width */
+    padding: 20px;
+    color: #FFFFFF;  /* Default text color: white */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.highlight-text {
+    font-size: 3rem;  /* Adjust this size as per your requirement */
+    color: #8B0000;  /* The red you've been using */
+    margin-bottom: 20px;  /* Spacing between the highlight and details */
+}
+
+.details {
+    font-size: 1.2rem;  /* Smaller than the highlight text */
+}
+
+.homepage-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #000;
+    height: 100vh;
+    color: #fff;
+}
+
+.homepage-text-content {
+    flex: 2;
+    font-size: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    padding: 5%;
+}
+
+.homepage-text-content h1 {
+    font-size: 5rem;
+    color: #FF4500;
+    font-weight: bold;
+    font-family: 'Sedgwick Ave Display', cursive;
+}
+
+.homepage-text-content p {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.homepage-image {
+    height: 100%;
+    flex: 2;
+    background: radial-gradient(circle at center, transparent, #000),
+    url('images/dirtbike.jpg') no-repeat center/cover;
+    margin-right: 1%;
+}
+.card-img-top {
+    width: 100%;
+    height: auto;
+}

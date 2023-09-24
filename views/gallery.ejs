@@ -1,0 +1,29 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Image Gallery</h2>
+    <div class="row masonry-grid">
+        <% images.forEach(image => { %>
+        <div class="col-md-4 masonry-item mb-4">
+            <div class="card">
+                <img src="<%= image.path %>" class="card-img-top" alt="<%= image.title %>">
+                <div class="card-body">
+                    <h5 class="card-title"><%= image.title %></h5>
+                    <p class="card-text"><%= image.description %></p>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const grid = document.querySelector('.masonry-grid');
+        const msnry = new Masonry( grid, {
+            // options
+            itemSelector: '.masonry-item',
+            columnWidth: '.masonry-item',
+            percentPosition: true
+        });
+    });
+</script>
