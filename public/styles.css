@@ -46,9 +46,13 @@ footer .container h5,
 footer .container p,
 footer .container a,
 footer .container h6 {  /* Add the h6 tag here */
-    color: #FFFFFF !important;
+    color: #FFFFFF;
     font-weight: bold;
     text-align: center;
+}
+
+footer .container h5 {
+    color: #2800ab;
 }
 
 /* Red color for hover effects on footer links with a smooth transition */
@@ -254,4 +258,101 @@ footer a.logo-center {
 .card-img-top {
     width: 100%;
     height: auto;
+}
+
+.dynamic-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    font-family: Arial, sans-serif;
+}
+
+.question-input {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.question-input label {
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.question-input select {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.form-navigation {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+
+}
+
+.form-navigation button {
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+.form-navigation button:hover {
+    background-color: #555;
+}
+
+/* Specific style for the Next Step button */
+.form-navigation button:last-child {
+    background-color: red;
+    color: white;
+}
+
+.form-summary {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+  
+/* styles.css or your stylesheet file */
+.step-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Adjust as needed */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.step-content > div {   /* Assuming each QuestionInput is rendered as a <div> */
+    flex: 1 1 40%;  /* This gives a bit of space between columns */
+    margin-bottom: 16px;  /* A bit of space between rows */
+}
+
+.step-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #2800ab;
+    text-align: center;
+}
+
+.step-wrapper {
+    /* Reset or adjust styles here */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 10%;
+    /* Any other styles to correct the layout */
 }

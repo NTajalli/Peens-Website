@@ -1,18 +1,61 @@
 const express = require('express');
-const app = express();
 const ejs = require('ejs');
 const path = require('path');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+const MemoryStore = require('session-memory-store')(session);
+
+
+const app = express();
 const PORT = 3000;
+
 app.set('view engine', 'ejs');
 
-// Serve static files from node_modules and public directory
+// Middleware for serving static files
 app.use('/static', express.static(path.join(__dirname, 'node_modules')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware for parsing incoming payloads
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(bodyParser.json({ limit: '50mb' }));
+
+app.use(express.json());
+
+// Multer setup for file uploads
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+const upload = multer({ storage: storage });
+
+// Session setup
+
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: false,
+    store: new MemoryStore(),
+    cookie: {
+        maxAge: 3600000 // 1 hour
+    }
+}));
+
+// Routes
 app.get('/', (req, res) => {
-    res.render('layout', {
-        body: 'home'
-    });
+    res.render('layout', { body: 'home' });
+});
+
+app.get('/form', (req, res) => {
+    res.render('layout', { body: 'form' });
 });
 
 const images = [
@@ -37,33 +80,46 @@ app.get('/contact', (req, res) => {
     res.render('layout', { body: 'contact', query: req.query });
 });
 
-
-app.use(express.static('public'));
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: false }));
-
-const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname);
+app.get('/get-form-data', (req, res) => {
+    try {
+        db.collection('tempFormData').findOne({ sessionId: req.sessionID }, (err, doc) => {
+            if (err) {
+                throw err;
+            }
+            res.json(doc ? doc.data : {});
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch form data" });
     }
 });
 
-const upload = multer({ storage: storage });
+  
+app.post('/save-form-data', (req, res) => {
+    try {
+        const formData = {
+            sessionId: req.sessionID,
+            data: req.body,
+            createdAt: new Date()
+        };
 
-app.use('/static', express.static(path.join(__dirname, 'node_modules')))
+        db.collection('tempFormData').insertOne(formData, (err, result) => {
+            if (err) {
+                throw err;
+            }
+            res.sendStatus(200);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to save form data" });
+    }
+});
 
-const nodemailer = require('nodemailer');
-const sgMail = require('@sendgrid/mail');
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });  
 
+// SendGrid Setup
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const transporter = nodemailer.createTransport({
@@ -75,19 +131,16 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post('/contact', (req, res) => {
-    // Get form values (make sure the form input names match these)
     const { name, email, message } = req.body;
 
-    // Set up email data
     const mailOptions = {
-        from: "noreplympdecalsus@gmail.com", // sender address from the form
-        to: 'noahtajalli@outlook.com', // your email where you want to receive messages
+        from: "noreplympdecalsus@gmail.com",
+        to: 'noahtajalli@outlook.com',
         subject: `Message from ${name}`,
         text: message,
-        html: `<p>${message}</p>` // you can use HTML here if you want
+        html: `<p>${message}</p>`
     };
 
-    // Send email
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log(error);
@@ -99,5 +152,7 @@ app.post('/contact', (req, res) => {
     });
 });
 
-
-
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
