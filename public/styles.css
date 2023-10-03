@@ -52,7 +52,7 @@ footer .container h6 {  /* Add the h6 tag here */
 }
 
 footer .container h5 {
-    color: #2800ab;
+    color: #125cfc;
 }
 
 /* Red color for hover effects on footer links with a smooth transition */
@@ -342,7 +342,7 @@ footer a.logo-center {
     font-size: 3rem;
     font-weight: bold;
     margin-bottom: 16px;
-    color: #2800ab;
+    color: #125cfc;
     text-align: center;
 }
 
@@ -355,4 +355,23 @@ footer a.logo-center {
     width: 100%;
     padding: 10px 10%;
     /* Any other styles to correct the layout */
+}
+
+.btn-home {
+    align-self: center;
+    width: 35%;
+    background-color: #125cfc;
+    color: white;
+    border-radius: 15px;
+    height: 3.1rem;
+    display: flex;
+    align-items: center;  /* Vertically aligns the content */
+    justify-content: center;  /* Horizontally aligns the content */
+    font-size: 1.2rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.btn-home:hover {
+    background-color: #0f4dd3;
 }
