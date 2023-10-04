@@ -315,14 +315,6 @@ footer a.logo-center {
     background-color: red;
     color: white;
 }
-
-.form-summary {
-    width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
   
 /* styles.css or your stylesheet file */
 .step-content {

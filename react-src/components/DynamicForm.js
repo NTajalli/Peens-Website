@@ -22,6 +22,32 @@ const DynamicForm = () => {
             .catch(error => console.error('Error fetching form data:', error));
     }, []);
 
+    const onSubmit = async () => {
+        try {
+            // Send the form data to the server
+            const response = await fetch('/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+    
+            if (response.status === 200) {
+                alert('Form submitted successfully!');
+                // You can also reset the form, navigate the user to another page, etc.
+                // setStep(0);
+                // setFormData({});
+            } else {
+                alert('Failed to submit the form. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('An error occurred while submitting the form. Please try again.');
+        }
+    };
+    
+
     const getCurrentStepQuestions = (stepOverride) => {
         const actualStep = stepOverride !== undefined ? stepOverride : step;
     
@@ -106,6 +132,7 @@ const DynamicForm = () => {
             <FormNavigation 
                 onNext={handleNext} 
                 onPrev={handlePrev} 
+                onSubmit={onSubmit}
                 currentStep={step} 
                 totalSteps={4} 
                 stepValidations={stepValidations} 

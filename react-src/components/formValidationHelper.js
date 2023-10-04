@@ -11,7 +11,6 @@ export const validateInputs = (questions, formData) => {
         }
     });
     
-    console.log(allValid);
     return {
         isValid: allValid, 
         errors: validationErrors

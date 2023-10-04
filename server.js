@@ -8,10 +8,60 @@ const MongoStore = require('connect-mongo');
 const nodemailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
 const MemoryStore = require('session-memory-store')(session);
-
-
+const AWS = require('aws-sdk');
+AWS.config.update({
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.S3_REGION
+ });
+ 
+const s3 = new AWS.S3();
 const app = express();
 const PORT = 3000;
+
+function generateHTML(formData) {
+    // Start with basic structure
+    let html = `
+        <html>
+            <body>
+                <h2>Form Submission</h2>
+    `;
+
+    // Add form text data
+    for (let key in formData) {
+        if (key !== "referenceFiles") {
+            html += `<p><strong>${key}:</strong> ${formData[key]}</p>`;
+        }
+    }
+
+    // Add images (You can adjust this if the structure of formData changes)
+    formData.referenceFiles.forEach(file => {
+        html += `<img src="${file.s3Url}"/>`; // Use the S3 URL of the uploaded image
+    });
+
+    // Close tags
+    html += `
+            </body>
+        </html>
+    `;
+
+    return html;
+}
+
+
+async function uploadToS3(content, fileName, contentType) {
+    const params = {
+        Bucket: 'mpdecalsformstorage', 
+        Key: fileName,
+        Body: content,
+        ContentType: contentType,
+        ACL: 'public-read'
+    };
+
+    await s3.putObject(params).promise();
+    return `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`;
+}
+
 
 app.set('view engine', 'ejs');
 
@@ -150,6 +200,49 @@ app.post('/contact', (req, res) => {
             res.redirect('/contact?success=true');
         }
     });
+});
+
+app.post('/send-email', async (req, res) => {
+    try {
+        const formData = req.body;
+
+        // 1. Upload each image in referenceFiles to S3
+        for (const file of formData.referenceFiles) {
+            const buffer = Buffer.from(file.dataURL.split(',')[1], 'base64'); // Convert data URL to buffer
+            const fileKey = `images/${Date.now()}-${file.name}`;
+            const s3Url = await uploadToS3(buffer, fileKey, file.type);
+            file.s3Url = s3Url; // Add the S3 URL to the file object
+        }
+
+        // 2. Generate the HTML content with updated formData
+        const htmlContent = generateHTML(formData);
+
+        // 3. Upload the generated HTML content to S3
+        const htmlKey = `form-submissions/${Date.now()}.html`;
+        const htmlS3Url = await uploadToS3(htmlContent, htmlKey, 'text/html');
+
+        // 4. Send an email with the S3 link to the HTML content
+        const msg = {
+            from: "noreplympdecalsus@gmail.com",
+            to: 'noahtajalli@outlook.com',
+            subject: 'New form submission',
+            html: `Here's the link to the form submission: <a href="${htmlS3Url}">${htmlS3Url}</a>`,
+            attachments: []  // You can still add attachments if needed
+        };
+
+        transporter.sendMail(msg, (error, info) => {
+            if (error) {
+                console.error("Error sending email:", error);
+                res.status(500).send("Error sending email.");
+            } else {
+                console.log("Email sent:", info.response);
+                res.status(200).send("Email sent successfully.");
+            }
+        });
+    } catch (err) {
+        console.error("Error in processing form submission:", err);
+        res.status(500).send("Error processing form submission.");
+    }
 });
 
 // Start the server
