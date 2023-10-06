@@ -6,14 +6,25 @@ const MAX_SIZE_MB = 5;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
 const Step4 = ({ formData, setFormData }) => {
-    const [uploadingFiles, setUploadingFiles] = useState(formData.referenceFiles || []);
+    const [uploadingFiles, setUploadingFiles] = useState(formData.referenceImages || []);
+    const [designDescription, setDesignDescription] = useState(formData.designDescription || "");
     const fileInputRef = useRef();
-    Step4.questions = [];
+    Step4.questions = [
+        { id: 'referenceImages', label: 'Reference Images', type: 'image', required: true }
+    ];
     formData = {
         ...formData,
         referenceImages: formData.referenceImages || []
     };
     
+    const handleDesignDescriptionChange = (event) => {
+        const text = event.target.value;
+        setDesignDescription(text);
+        setFormData(prevData => ({
+            ...prevData,
+            designDescription: text
+        }));
+    };
 
     const handleImageChange = async (event) => {
         const files = Array.from(event.target.files);
@@ -52,7 +63,7 @@ const Step4 = ({ formData, setFormData }) => {
             newUploadingFiles[index].status = 'done';
             setUploadingFiles([...newUploadingFiles]);
             setFormData(prevData => {
-            const newFormData = { ...prevData, referenceFiles: newUploadingFiles };
+            const newFormData = { ...prevData, referenceImages: newUploadingFiles };
             return newFormData;
 }           );
 
@@ -85,40 +96,53 @@ const Step4 = ({ formData, setFormData }) => {
             const newFiles = [...uploadingFiles];
             newFiles.splice(index, 1);
             setUploadingFiles(newFiles);
+    
+            // Update formData to match the current uploadingFiles state
+            setFormData(prevData => ({
+                ...prevData,
+                referenceImages: newFiles
+            }));
         }
     };
+    
 
     return (
-        <div className="step4-container">
-            <label className="step4-label">Upload Reference Images (up to {MAX_IMAGES} images, {MAX_SIZE_MB} MB max):</label>
-            
-            <button className="step4-upload-btn" type="button" onClick={() => fileInputRef.current.click()}>
-                Choose Images
-            </button>
-            <input
-                type="file"
-                style={{ display: 'none' }}
-                ref={fileInputRef}
-                multiple
-                onChange={handleImageChange}
-            />
-            <ul className="step4-file-list">
-                {formData.referenceImages.map((file, index) => (
-                    <li key={index} className="step4-file-item">
-                        {file.name}
-                        <button className="step4-file-delete" onClick={() => deleteFile(index, true)}>X</button>
-                    </li>
-                ))}
-                {uploadingFiles.map((file, index) => (
-                    <li key={index + formData.referenceImages.length} className="step4-file-item">
-                        {file.name} 
-                        {file.status === 'uploading' && <span> Uploading... {file.progress}%</span>}
-                        {file.status === 'done' && <button  onClick={() => deleteFile(index)}>X</button>}
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <>
+            <h1 className="step-title">UPLOAD IMAGE</h1>
+            <div className="step4-container">
+                <label className="step4-label">UPLOAD REFERENCE IMAGES (up to {MAX_IMAGES} images, {MAX_SIZE_MB} MB max)</label>
+                <button className="step4-upload-btn" type="button" onClick={() => fileInputRef.current.click()}>
+                    Choose Images
+                </button>
+                <input
+                    type="file"
+                    style={{ display: 'none' }}
+                    ref={fileInputRef}
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageChange}
+                />
+                <ul className="step4-file-list">
+                    {formData.referenceImages.map((file, index) => (
+                        <li key={index} className="step4-file-item">
+                            {file.name}
+                            <button className="step4-file-delete" onClick={() => deleteFile(index, true)}>X</button>
+                        </li>
+                    ))}
+                </ul>
+                <label className="step4-logo-text-label">DESIGN</label>
+                <textarea
+                    className="step5-logo-textbox" // Reusing the style from Step5
+                    value={designDescription}
+                    onChange={handleDesignDescriptionChange}
+                    placeholder="Provide any additional design details here..."
+                    rows="3"
+                />
+                <p className="step5-hint">Let us know about additional info of the design you want.</p>
+            </div>
+        </>
     );
 };
+
 
 export default Step4;

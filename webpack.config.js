@@ -1,12 +1,13 @@
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 module.exports = {
-    entry: './react-src/index.js',
+    entry: './src/react-components/index.js',
     output: {
-        path: path.resolve('public/js'),
-        filename: 'bundle.js'
+        path: path.resolve('public'),
+        filename: 'js/bundle.js'
     },
-    mode: 'production', // or 'development'
+    mode: 'production',
     module: {
         rules: [
             {
@@ -21,8 +22,17 @@ module.exports = {
             }, 
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                use: [
+                    MiniCssExtractPlugin.loader, 
+                    'css-loader'
+                ]
             }
         ]
-    }
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].css',
+            chunkFilename: 'css/[id].css'
+        }),
+    ]
 };

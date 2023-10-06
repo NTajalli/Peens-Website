@@ -3,15 +3,11 @@ import QuestionInput from '../QuestionInput';
 import { validateInputs } from '../formValidationHelper';
 
 
-const Step3 = ({ formData, setFormData }) => {
+const Step8 = ({ formData, setFormData }) => {
     const [validationState, setValidationState] = useState({});
 
     const questions = [
-        { type: 'text', label: 'NAME', id: 'bikerName' },
-        { type: 'text', label: 'RACE NUMBER', id: 'bikerRaceNumber' },
-        { type: 'text', label: 'RACE NUMBER COLOR', id: 'bikerRaceNumberColor' },
-        { type: 'text', label: 'BACKGROUND COLOR', id: 'bikeBackgroundColor' },
-        { type: 'select', label: 'NUMBER FONT SELECTION', id: 'bikeNumberFontSelection', options: ['SELECT ONE', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6'] }
+        { type: 'select', label: 'LAMINANT FINISHES', id: 'finishes', options: ['SELECT ONE', 'GLOSSY (+ $0)', 'MATTE (+ $0)', 'TEXTURED (+ $40)']}
     ];
 
     const handleInputChange = (id, value) => {
@@ -19,11 +15,11 @@ const Step3 = ({ formData, setFormData }) => {
         setFormData(updatedData);
     };
     
-    Step3.questions = questions;
+    Step8.questions = questions;
 
     return (
         <>
-            <h1 className="step-title">Bike Details</h1>
+            <h1 className="step-title">FINISHES</h1>
             <div className="step-content">
                 {questions.map((q) => (
                     <QuestionInput
@@ -39,4 +35,4 @@ const Step3 = ({ formData, setFormData }) => {
     );
 };
 
-export default Step3;
+export default Step8;

@@ -1,3 +1,7 @@
+const React = require('react');
+require('ignore-styles');
+const { renderToStaticMarkup } = require('react-dom/server');
+const renderFormSummary = require('./renderFormSummary');
 const express = require('express');
 const ejs = require('ejs');
 const path = require('path');
@@ -9,6 +13,7 @@ const nodemailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
 const MemoryStore = require('session-memory-store')(session);
 const AWS = require('aws-sdk');
+
 AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -66,9 +71,8 @@ async function uploadToS3(content, fileName, contentType) {
 app.set('view engine', 'ejs');
 
 // Middleware for serving static files
-app.use('/static', express.static(path.join(__dirname, 'node_modules')));
-app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/static', express.static(path.join(__dirname, '../../node_modules')));
+app.use(express.static(path.join(__dirname, '../../public')));
 
 // Middleware for parsing incoming payloads
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
@@ -165,9 +169,13 @@ app.post('/save-form-data', (req, res) => {
     }
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  });  
+app.get('*.css', (req, res) => {
+    res.status(404).send('CSS file not found.');
+});
+
+
+
+
 
 // SendGrid Setup
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -207,15 +215,21 @@ app.post('/send-email', async (req, res) => {
         const formData = req.body;
 
         // 1. Upload each image in referenceFiles to S3
-        for (const file of formData.referenceFiles) {
+        for (const file of formData.referenceImages) {
             const buffer = Buffer.from(file.dataURL.split(',')[1], 'base64'); // Convert data URL to buffer
             const fileKey = `images/${Date.now()}-${file.name}`;
             const s3Url = await uploadToS3(buffer, fileKey, file.type);
             file.s3Url = s3Url; // Add the S3 URL to the file object
         }
 
+        const file = formData.logo;
+        const buffer = Buffer.from(file.dataURL.split(',')[1], 'base64'); // Convert data URL to buffer
+        const fileKey = `images/${Date.now()}-${file.name}`;
+        const s3Url = await uploadToS3(buffer, fileKey, file.type);
+        file.s3Url = s3Url;
+
         // 2. Generate the HTML content with updated formData
-        const htmlContent = generateHTML(formData);
+        const htmlContent = renderFormSummary(formData);
 
         // 3. Upload the generated HTML content to S3
         const htmlKey = `form-submissions/${Date.now()}.html`;
@@ -245,6 +259,9 @@ app.post('/send-email', async (req, res) => {
     }
 });
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); // if you have an index.html in the public directory
+});
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

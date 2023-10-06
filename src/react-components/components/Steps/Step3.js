@@ -3,26 +3,27 @@ import QuestionInput from '../QuestionInput';
 import { validateInputs } from '../formValidationHelper';
 
 
-const Step2 = ({ formData, setFormData }) => {
+const Step3 = ({ formData, setFormData }) => {
     const [validationState, setValidationState] = useState({});
 
     const questions = [
-        { type: 'select', label: 'MAKE', id: 'bikeMake', options: ['SELECT ONE', 'BETA', 'COBRA', 'GAS GAS', 'HONDA', 'HUSABERG', 'HUSQVARNA', 'KAWASAKE', 'KTM', 'SHERCO', 'SUZUKI', 'TM', 'YAMAHA']},
-        { type: 'text', label: 'MODEL', id: 'bikeModel' },
-        { type: 'text', label: 'YEAR', id: 'bikeYear' },
-        { type: 'select', label: 'STROKE', id: 'bikeStroke', options: ['SELECT ONE', '2-Stroke', '4-Stroke'] }
+        { type: 'text', label: 'NAME', id: 'riderName' },
+        { type: 'text', label: 'RACE NUMBER', id: 'raceNumber' },
+        { type: 'text', label: 'RACE NUMBER COLOR', id: 'raceNumberColor' },
+        { type: 'text', label: 'BACKGROUND COLOR', id: 'backgroundColor' },
+        { type: 'select', label: 'NUMBER FONT SELECTION', id: 'numberFontSelection', options: ['SELECT ONE', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6'] }
     ];
 
     const handleInputChange = (id, value) => {
         const updatedData = { ...formData, [id]: value };
         setFormData(updatedData);
     };
-
-    Step2.questions = questions;
+    
+    Step3.questions = questions;
 
     return (
         <>
-            <h1 className="step-title">Bike Details</h1>
+            <h1 className="step-title">Rider Details</h1>
             <div className="step-content">
                 {questions.map((q) => (
                     <QuestionInput
@@ -38,4 +39,4 @@ const Step2 = ({ formData, setFormData }) => {
     );
 };
 
-export default Step2;
+export default Step3;
