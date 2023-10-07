@@ -1,6 +1,4 @@
-const React = require('react');
 require('ignore-styles');
-const { renderToStaticMarkup } = require('react-dom/server');
 const renderFormSummary = require('./renderFormSummary');
 const express = require('express');
 const ejs = require('ejs');

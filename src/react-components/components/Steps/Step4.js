@@ -27,48 +27,49 @@ const Step4 = ({ formData, setFormData }) => {
     };
 
     const handleImageChange = async (event) => {
-        const files = Array.from(event.target.files);
-        let totalSize = files.reduce((acc, file) => acc + file.size, 0);
+    const files = Array.from(event.target.files);
+    let totalSize = files.reduce((acc, file) => acc + file.size, 0);
 
-        if (totalSize > MAX_SIZE_BYTES) {
-            alert(`Total size of all files should not exceed ${MAX_SIZE_MB} MB.`);
-            return;
-        }
+    if (totalSize > MAX_SIZE_BYTES) {
+        alert(`Total size of all files should not exceed ${MAX_SIZE_MB} MB.`);
+        return;
+    }
 
-        if (files.length + formData.referenceImages.length > MAX_IMAGES) {
-            alert(`You can upload a maximum of ${MAX_IMAGES} images.`);
-            return;
-        }
+    // Check the total number of files (existing + new ones)
+    if (files.length + formData.referenceImages.length > MAX_IMAGES) {
+        alert(`You can upload a maximum of ${MAX_IMAGES} images.`);
+        return;
+    }
 
-        const newUploadingFiles = files.map(file => ({
-            name: file.name,
-            status: 'uploading',
-            progress: 0,
-            dataURL: ''
+    const newUploadingFiles = files.map(file => ({
+        name: file.name,
+        status: 'uploading',
+        progress: 0,
+        dataURL: ''
+    }));
+
+    // Append the new files to the existing ones
+    setUploadingFiles(prevFiles => [...(prevFiles || []), ...newUploadingFiles]);
+
+    for (let file of files) {
+        const dataURL = await readFileWithProgress(file, progress => {
+            const updatedFiles = [...uploadingFiles, ...newUploadingFiles];
+            const index = updatedFiles.findIndex(f => f.name === file.name);
+            updatedFiles[index].progress = progress;
+            setUploadingFiles(updatedFiles);
+        });
+
+        const index = newUploadingFiles.findIndex(f => f.name === file.name);
+        newUploadingFiles[index].dataURL = dataURL;
+        newUploadingFiles[index].status = 'done';
+
+        // Update formData to match the current uploadingFiles state
+        setFormData(prevData => ({
+            ...prevData,
+            referenceImages: [...(prevData.referenceImages || []), ...newUploadingFiles]
         }));
-
-        setUploadingFiles([...newUploadingFiles]);
-
-
-        for (let file of files) {
-            const dataURL = await readFileWithProgress(file, progress => {
-                const updatedFiles = [...newUploadingFiles];
-                const index = updatedFiles.findIndex(f => f.name === file.name);
-                updatedFiles[index].progress = progress;
-                setUploadingFiles([...newUploadingFiles]);
-            });
-
-            const index = newUploadingFiles.findIndex(f => f.name === file.name);
-            newUploadingFiles[index].dataURL = dataURL;
-            newUploadingFiles[index].status = 'done';
-            setUploadingFiles([...newUploadingFiles]);
-            setFormData(prevData => {
-            const newFormData = { ...prevData, referenceImages: newUploadingFiles };
-            return newFormData;
-}           );
-
-        }
-    };
+    }
+};
 
     const readFileWithProgress = (file, progressCallback) => {
         return new Promise((resolve, reject) => {
@@ -112,7 +113,7 @@ const Step4 = ({ formData, setFormData }) => {
             <div className="step4-container">
                 <label className="step4-label">UPLOAD REFERENCE IMAGES (up to {MAX_IMAGES} images, {MAX_SIZE_MB} MB max)</label>
                 <button className="step4-upload-btn" type="button" onClick={() => fileInputRef.current.click()}>
-                    Choose Images
+                    Add Image(s)
                 </button>
                 <input
                     type="file"

@@ -91,8 +91,10 @@ var Step4 = function Step4(_ref) {
                 progress: 0,
                 dataURL: ''
               };
+            }); // Append the new files to the existing ones
+            setUploadingFiles(function (prevFiles) {
+              return [].concat(_toConsumableArray(prevFiles || []), _toConsumableArray(newUploadingFiles));
             });
-            setUploadingFiles(_toConsumableArray(newUploadingFiles));
             _loop = /*#__PURE__*/_regeneratorRuntime().mark(function _loop() {
               var file, dataURL, index;
               return _regeneratorRuntime().wrap(function _loop$(_context) {
@@ -101,12 +103,12 @@ var Step4 = function Step4(_ref) {
                     file = _files[_i];
                     _context.next = 3;
                     return readFileWithProgress(file, function (progress) {
-                      var updatedFiles = _toConsumableArray(newUploadingFiles);
+                      var updatedFiles = [].concat(_toConsumableArray(uploadingFiles), _toConsumableArray(newUploadingFiles));
                       var index = updatedFiles.findIndex(function (f) {
                         return f.name === file.name;
                       });
                       updatedFiles[index].progress = progress;
-                      setUploadingFiles(_toConsumableArray(newUploadingFiles));
+                      setUploadingFiles(updatedFiles);
                     });
                   case 3:
                     dataURL = _context.sent;
@@ -115,14 +117,14 @@ var Step4 = function Step4(_ref) {
                     });
                     newUploadingFiles[index].dataURL = dataURL;
                     newUploadingFiles[index].status = 'done';
-                    setUploadingFiles(_toConsumableArray(newUploadingFiles));
+
+                    // Update formData to match the current uploadingFiles state
                     setFormData(function (prevData) {
-                      var newFormData = _objectSpread(_objectSpread({}, prevData), {}, {
-                        referenceImages: newUploadingFiles
+                      return _objectSpread(_objectSpread({}, prevData), {}, {
+                        referenceImages: [].concat(_toConsumableArray(prevData.referenceImages || []), _toConsumableArray(newUploadingFiles))
                       });
-                      return newFormData;
                     });
-                  case 9:
+                  case 8:
                   case "end":
                     return _context.stop();
                 }
@@ -200,7 +202,7 @@ var Step4 = function Step4(_ref) {
     onClick: function onClick() {
       return fileInputRef.current.click();
     }
-  }, "Choose Images"), /*#__PURE__*/_react["default"].createElement("input", {
+  }, "Add Image(s)"), /*#__PURE__*/_react["default"].createElement("input", {
     type: "file",
     style: {
       display: 'none'
