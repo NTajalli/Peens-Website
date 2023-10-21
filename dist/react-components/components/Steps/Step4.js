@@ -62,7 +62,7 @@ var Step4 = function Step4(_ref) {
   };
   var handleImageChange = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
-      var files, totalSize, newUploadingFiles, _loop, _i, _files;
+      var files, totalSize, newUploadingFiles, combinedFiles, _loop, _i, _files;
       return _regeneratorRuntime().wrap(function _callee$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -95,6 +95,7 @@ var Step4 = function Step4(_ref) {
             setUploadingFiles(function (prevFiles) {
               return [].concat(_toConsumableArray(prevFiles || []), _toConsumableArray(newUploadingFiles));
             });
+            combinedFiles = [].concat(_toConsumableArray(uploadingFiles), _toConsumableArray(newUploadingFiles));
             _loop = /*#__PURE__*/_regeneratorRuntime().mark(function _loop() {
               var file, dataURL, index;
               return _regeneratorRuntime().wrap(function _loop$(_context) {
@@ -103,45 +104,44 @@ var Step4 = function Step4(_ref) {
                     file = _files[_i];
                     _context.next = 3;
                     return readFileWithProgress(file, function (progress) {
-                      var updatedFiles = [].concat(_toConsumableArray(uploadingFiles), _toConsumableArray(newUploadingFiles));
-                      var index = updatedFiles.findIndex(function (f) {
+                      var index = combinedFiles.findIndex(function (f) {
                         return f.name === file.name;
                       });
-                      updatedFiles[index].progress = progress;
-                      setUploadingFiles(updatedFiles);
+                      combinedFiles[index].progress = progress;
+                      setUploadingFiles(_toConsumableArray(combinedFiles));
                     });
                   case 3:
                     dataURL = _context.sent;
-                    index = newUploadingFiles.findIndex(function (f) {
+                    index = combinedFiles.findIndex(function (f) {
                       return f.name === file.name;
                     });
-                    newUploadingFiles[index].dataURL = dataURL;
-                    newUploadingFiles[index].status = 'done';
-
-                    // Update formData to match the current uploadingFiles state
-                    setFormData(function (prevData) {
-                      return _objectSpread(_objectSpread({}, prevData), {}, {
-                        referenceImages: [].concat(_toConsumableArray(prevData.referenceImages || []), _toConsumableArray(newUploadingFiles))
-                      });
-                    });
-                  case 8:
+                    combinedFiles[index].dataURL = dataURL;
+                    combinedFiles[index].status = 'done';
+                  case 7:
                   case "end":
                     return _context.stop();
                 }
               }, _loop);
             });
             _i = 0, _files = files;
-          case 12:
+          case 13:
             if (!(_i < _files.length)) {
-              _context2.next = 17;
+              _context2.next = 18;
               break;
             }
-            return _context2.delegateYield(_loop(), "t0", 14);
-          case 14:
+            return _context2.delegateYield(_loop(), "t0", 15);
+          case 15:
             _i++;
-            _context2.next = 12;
+            _context2.next = 13;
             break;
-          case 17:
+          case 18:
+            // Update formData to match the combinedFiles state
+            setFormData(function (prevData) {
+              return _objectSpread(_objectSpread({}, prevData), {}, {
+                referenceImages: combinedFiles
+              });
+            });
+          case 19:
           case "end":
             return _context2.stop();
         }
@@ -192,7 +192,7 @@ var Step4 = function Step4(_ref) {
   };
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
     className: "step-title"
-  }, "UPLOAD IMAGE"), /*#__PURE__*/_react["default"].createElement("div", {
+  }, "REFERENCE IMAGES AND DETAILS"), /*#__PURE__*/_react["default"].createElement("div", {
     className: "step4-container"
   }, /*#__PURE__*/_react["default"].createElement("label", {
     className: "step4-label"

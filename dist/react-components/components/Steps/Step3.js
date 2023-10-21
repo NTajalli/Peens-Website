@@ -58,7 +58,7 @@ var Step3 = function Step3(_ref) {
   Step3.questions = questions;
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
     className: "step-title"
-  }, "Rider Details"), /*#__PURE__*/_react["default"].createElement("div", {
+  }, "RIDER DETAILS"), /*#__PURE__*/_react["default"].createElement("div", {
     className: "step-content"
   }, questions.map(function (q) {
     return /*#__PURE__*/_react["default"].createElement(_QuestionInput["default"], {

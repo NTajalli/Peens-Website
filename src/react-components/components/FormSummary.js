@@ -46,6 +46,7 @@ const FormSummary = ({ data }) => {
         // Add other steps and their keys here...
     ];
 
+    console.log(data)
     return (
         <div className="form-summary">
             <h1 className='step-title'>Review Your Customizations</h1>
@@ -102,8 +103,8 @@ const FormSummary = ({ data }) => {
                                     );
                                 } else if (!value) {
                                     <tr key={key}>
-                                            <td>{ERROR}</td>
-                                            <td>{ERROR}</td>
+                                            <td>{"ERROR"}</td>
+                                            <td>{"ERROR"}</td>
                                             <td></td>
                                         </tr>
                                 } else if (value.dataURL) {

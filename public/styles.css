@@ -240,7 +240,7 @@ footer a.logo-center {
     font-size: 5rem;
     color: #FF4500;
     font-weight: bold;
-    font-family: 'Sedgwick Ave Display', cursive;
+    font-family: 'Carter One', cursive;
 }
 
 .homepage-text-content p {
@@ -278,7 +278,7 @@ footer a.logo-center {
 }
 
 .question-input label {
-    font-size: 24px;
+    font-size: 15px;
     color: white;
     font-weight: bold;
     margin-bottom: 10px;
@@ -337,6 +337,7 @@ footer a.logo-center {
     margin-bottom: 16px;
     color: #125cfc;
     text-align: center;
+    font-family: 'Carter One', cursive;
 }
 
 .step-wrapper {
@@ -355,7 +356,7 @@ footer a.logo-center {
     width: 35%;
     background-color: #125cfc;
     color: white;
-    border-radius: 15px;
+    border-radius: 7px;
     height: 3.1rem;
     display: flex;
     align-items: center;  /* Vertically aligns the content */

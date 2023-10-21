@@ -55,7 +55,7 @@ var Step2 = function Step2(_ref) {
   Step2.questions = questions;
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
     className: "step-title"
-  }, "Bike Details"), /*#__PURE__*/_react["default"].createElement("div", {
+  }, "BIKE DETAILS"), /*#__PURE__*/_react["default"].createElement("div", {
     className: "step-content"
   }, questions.map(function (q) {
     return /*#__PURE__*/_react["default"].createElement(_QuestionInput["default"], {

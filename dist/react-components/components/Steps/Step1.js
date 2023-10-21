@@ -31,7 +31,7 @@ var Step1 = function Step1(_ref) {
     setValidationState = _useState2[1];
   var questions = [{
     type: 'select',
-    label: 'Bike Size',
+    label: 'SELECT YOUR BIKE SIZE',
     id: 'bikeSize',
     options: ['SELECT ONE', 'Pit Bike 50cc', 'Mini Bike 65-85cc', 'Big Bikes 125-400cc']
   }];
@@ -42,7 +42,7 @@ var Step1 = function Step1(_ref) {
   Step1.questions = questions;
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
     className: "step-title"
-  }, "Bike Size"), questions.map(function (q) {
+  }, "BIKE SIZE"), questions.map(function (q) {
     return /*#__PURE__*/_react["default"].createElement(_QuestionInput["default"], {
       key: q.id,
       question: q,

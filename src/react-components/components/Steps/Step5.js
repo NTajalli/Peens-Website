@@ -1,19 +1,32 @@
 import React, { useState, useRef } from 'react';
 import './Step5.css';
 
+const MAX_SIZE_MB = 0.5;
+const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
 const Step5 = ({ formData, setFormData }) => {
-    const [uploadingFile, setUploadingFile] = useState(formData.logo || null);
-    const [logoText, setLogoText] = useState(formData.logos || "");
+    formData = {
+        ...formData,
+        logo: formData.logo || null,
+        logos: formData.logos || ""  // Setting default empty string value for logos
+    };
+
+    const [uploadingFile, setUploadingFile] = useState(formData.logo);
+    const [logoText, setLogoText] = useState(formData.logos);
     const fileInputRef = useRef();
     Step5.questions = [
         { id: 'logo', label: 'Logo', type: 'singleImage', required: true }
     ];
-    
 
     const handleLogoChange = async (event) => {
         const file = event.target.files[0];
 
         if (!file) return;
+
+        if (file.size > MAX_SIZE_BYTES) {
+            alert(`The logo file size should not exceed ${MAX_SIZE_MB} MB.`);
+            return;
+        }
 
         const dataURL = await readFile(file);
         
@@ -22,7 +35,6 @@ const Step5 = ({ formData, setFormData }) => {
             dataURL: dataURL
         });
 
-        // Update the formData with the new logo details
         setFormData(prevData => ({
             ...prevData,
             logo: {
@@ -36,7 +48,6 @@ const Step5 = ({ formData, setFormData }) => {
         const text = event.target.value;
         setLogoText(text);
 
-        // Update the formData with the entered logos text
         setFormData(prevData => ({
             ...prevData,
             logos: text
@@ -55,7 +66,6 @@ const Step5 = ({ formData, setFormData }) => {
     const deleteFile = () => {
         setUploadingFile(null);
         
-        // Update the formData to remove the logo details
         setFormData(prevData => ({
             ...prevData,
             logo: null
@@ -64,10 +74,9 @@ const Step5 = ({ formData, setFormData }) => {
 
     return (
         <>
-            <h1 className="step-title">UPLOAD LOGO</h1>
+            <h1 className="step-title">LOGO</h1>
             <div className="step5-container">
                 <label className="step5-label">UPLOAD YOUR LOGO</label>
-                
                 <button className="step5-upload-btn" type="button" onClick={() => fileInputRef.current.click()}>
                     Choose Logo
                 </button>

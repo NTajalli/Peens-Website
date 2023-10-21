@@ -23,7 +23,7 @@ const Step3 = ({ formData, setFormData }) => {
 
     return (
         <>
-            <h1 className="step-title">Rider Details</h1>
+            <h1 className="step-title">RIDER DETAILS</h1>
             <div className="step-content">
                 {questions.map((q) => (
                     <QuestionInput

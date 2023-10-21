@@ -45,6 +45,7 @@ var FormSummary = function FormSummary(_ref) {
   // Add other steps and their keys here...
   ];
 
+  console.log(data);
   return /*#__PURE__*/React.createElement("div", {
     className: "form-summary"
   }, /*#__PURE__*/React.createElement("h1", {
@@ -94,7 +95,7 @@ var FormSummary = function FormSummary(_ref) {
       } else if (!value) {
         /*#__PURE__*/React.createElement("tr", {
           key: key
-        }, /*#__PURE__*/React.createElement("td", null, ERROR), /*#__PURE__*/React.createElement("td", null, ERROR), /*#__PURE__*/React.createElement("td", null));
+        }, /*#__PURE__*/React.createElement("td", null, "ERROR"), /*#__PURE__*/React.createElement("td", null, "ERROR"), /*#__PURE__*/React.createElement("td", null));
       } else if (value.dataURL) {
         return /*#__PURE__*/React.createElement("tr", {
           key: key

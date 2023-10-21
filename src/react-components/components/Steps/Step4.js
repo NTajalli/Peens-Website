@@ -51,24 +51,25 @@ const Step4 = ({ formData, setFormData }) => {
     // Append the new files to the existing ones
     setUploadingFiles(prevFiles => [...(prevFiles || []), ...newUploadingFiles]);
 
+    let combinedFiles = [...uploadingFiles, ...newUploadingFiles];
+
     for (let file of files) {
         const dataURL = await readFileWithProgress(file, progress => {
-            const updatedFiles = [...uploadingFiles, ...newUploadingFiles];
-            const index = updatedFiles.findIndex(f => f.name === file.name);
-            updatedFiles[index].progress = progress;
-            setUploadingFiles(updatedFiles);
+            const index = combinedFiles.findIndex(f => f.name === file.name);
+            combinedFiles[index].progress = progress;
+            setUploadingFiles([...combinedFiles]);
         });
 
-        const index = newUploadingFiles.findIndex(f => f.name === file.name);
-        newUploadingFiles[index].dataURL = dataURL;
-        newUploadingFiles[index].status = 'done';
-
-        // Update formData to match the current uploadingFiles state
-        setFormData(prevData => ({
-            ...prevData,
-            referenceImages: [...(prevData.referenceImages || []), ...newUploadingFiles]
-        }));
+        const index = combinedFiles.findIndex(f => f.name === file.name);
+        combinedFiles[index].dataURL = dataURL;
+        combinedFiles[index].status = 'done';
     }
+
+    // Update formData to match the combinedFiles state
+    setFormData(prevData => ({
+        ...prevData,
+        referenceImages: combinedFiles
+    }));
 };
 
     const readFileWithProgress = (file, progressCallback) => {
@@ -109,7 +110,7 @@ const Step4 = ({ formData, setFormData }) => {
 
     return (
         <>
-            <h1 className="step-title">UPLOAD IMAGE</h1>
+            <h1 className="step-title">REFERENCE IMAGES AND DETAILS</h1>
             <div className="step4-container">
                 <label className="step4-label">UPLOAD REFERENCE IMAGES (up to {MAX_IMAGES} images, {MAX_SIZE_MB} MB max)</label>
                 <button className="step4-upload-btn" type="button" onClick={() => fileInputRef.current.click()}>
