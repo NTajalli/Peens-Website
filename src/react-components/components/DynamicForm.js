@@ -13,6 +13,8 @@ import FormNavigation from './FormNavigation';
 import { CSSTransition } from 'react-transition-group';
 import './fadeTransition.css';
 import { validateInputs } from './formValidationHelper';
+import './spinner.css';
+
 
 const DynamicForm = () => {
     const [step, setStep] = useState(0);
@@ -20,7 +22,8 @@ const DynamicForm = () => {
     const [validationState, setValidationState] = useState({});
     const [stepValidations, setStepValidations] = useState([false, false, false, false]);
     const [price, setPrice] = useState(0);
-
+    const [loading, setLoading] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
 
     useEffect(() => {
         fetch('/get-form-data')
@@ -30,14 +33,13 @@ const DynamicForm = () => {
     }, []);
 
     const onSubmit = async () => {
+        setLoading(true);
         try {
-
             const dataToSend = {
                 ...formData,
                 price
             };
-
-            // Send the form data to the server
+    
             const response = await fetch('/send-email', {
                 method: 'POST',
                 headers: {
@@ -47,18 +49,18 @@ const DynamicForm = () => {
             });
     
             if (response.status === 200) {
-                alert('Form submitted successfully!');
-                // You can also reset the form, navigate the user to another page, etc.
-                // setStep(0);
-                // setFormData({});
+                setSubmitSuccess(true);
             } else {
                 alert('Failed to submit the form. Please try again.');
             }
         } catch (error) {
             console.error('Error submitting form:', error);
             alert('An error occurred while submitting the form. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
+    
     
 
     const getCurrentStepQuestions = (stepOverride) => {
@@ -155,26 +157,41 @@ const DynamicForm = () => {
 
     return (
         <div className="dynamic-form">
-            <div id="price-display">
-                Current Estimated Total Price: ${price}
+            {submitSuccess ? (
+                <div className="success-page">
+                <div className="details-container">
+                    <h1 className="success-message">We Have Received Your Details!</h1>
+                    <p className="success-description">Thank you for your submission. Our team will review it and get back to you soon!</p>
+                    <a href="/" className="go-home-link">Go Back to Home</a>
+                </div>
+                <div className="image-container">
+                </div>
             </div>
-            <CSSTransition in={true} appear={true} timeout={1500} classNames="fade" key={step} unmountOnExit>
-                {(state) => (
-                    <div className="step-wrapper">
-                        {renderStep()}
+            ) : (
+                <>
+                    {loading && <div className="spinner"></div>}
+                    <div id="price-display">
+                        Current Estimated Total Price: ${price}
                     </div>
-                )}
-            </CSSTransition>
-            <FormNavigation 
-                onNext={handleNext} 
-                onPrev={handlePrev} 
-                onSubmit={onSubmit}
-                currentStep={step} 
-                totalSteps={9} 
-                stepValidations={stepValidations} 
-            />
+                    <CSSTransition in={true} appear={true} timeout={1500} classNames="fade" key={step} unmountOnExit>
+                        {(state) => (
+                            <div className="step-wrapper">
+                                {renderStep()}
+                            </div>
+                        )}
+                    </CSSTransition>
+                    <FormNavigation 
+                        onNext={handleNext} 
+                        onPrev={handlePrev} 
+                        onSubmit={onSubmit}
+                        currentStep={step} 
+                        totalSteps={9} 
+                        stepValidations={stepValidations} 
+                    />
+                </>
+            )}
         </div>
-    );
+    );    
 };
 
 export default DynamicForm;

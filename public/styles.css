@@ -375,6 +375,7 @@ footer a.logo-center {
     color: #FF4500;
     font-weight: bold;
     margin-bottom: 30px;
+    text-align: center;
 }
 
 .big-box input {
@@ -445,6 +446,14 @@ td.step-divider:first-child {
     border-top: 2px solid #444; /* Adds a border on top for more visual separation */
 }
 
+.image-container {
+    height: 100%;
+    flex: 2;
+    background: radial-gradient(circle at center, transparent, #000),
+    url('images/dirtbike.jpg') no-repeat center/cover;
+    margin-right: 1%;
+}
+
 #price-display {
     background-color: red;
     color: white;
@@ -453,6 +462,11 @@ td.step-divider:first-child {
     padding: 10px;
     min-width: 100vw;
     text-align: center;
+    margin-bottom: 10px;
+}
+
+.customize-header {
+    font-size: 6rem !important;
 }
 
 button, input, optgroup, select, textarea {
@@ -460,5 +474,49 @@ button, input, optgroup, select, textarea {
     font-weight: 500;
 }
 
+@media (max-width: 768px) {
+    .homepage-image {
+        display: none; /* Hide the image container */
+    }
+
+    .homepage-text-content {
+        max-width: 100vw;
+    }
+
+    .form-summary {
+        padding: 0;
+    }
+
+    .step-wrapper {
+        padding: 0;
+    }
+
+    .step7-container {
+        gap: 10px;
+        max-width: 100vw;
+    }
+
+    .color-label {
+        font-size: 15px;
+    }
+
+    .color-option {
+        padding: 0px;
+    }
+
+    .btn-home {
+        font-size: 1rem;
+        margin-top: 20px;
+    }
+
+    .customize-header {
+        font-size: 4rem !important;
+    }
+
+    .your-bike-header {
+        font-size: 3rem !important;
+        margin-bottom: 30px !important;
+    }
+}
 
 

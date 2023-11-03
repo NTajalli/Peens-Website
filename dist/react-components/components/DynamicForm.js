@@ -19,6 +19,7 @@ var _FormNavigation = _interopRequireDefault(require("./FormNavigation"));
 var _reactTransitionGroup = require("react-transition-group");
 require("./fadeTransition.css");
 var _formValidationHelper = require("./formValidationHelper");
+require("./spinner.css");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -62,6 +63,14 @@ var DynamicForm = function DynamicForm() {
     _useState10 = _slicedToArray(_useState9, 2),
     price = _useState10[0],
     setPrice = _useState10[1];
+  var _useState11 = (0, _react.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    loading = _useState12[0],
+    setLoading = _useState12[1];
+  var _useState13 = (0, _react.useState)(false),
+    _useState14 = _slicedToArray(_useState13, 2),
+    submitSuccess = _useState14[0],
+    setSubmitSuccess = _useState14[1];
   (0, _react.useEffect)(function () {
     fetch('/get-form-data').then(function (res) {
       return res.json();
@@ -77,11 +86,12 @@ var DynamicForm = function DynamicForm() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
+            setLoading(true);
+            _context.prev = 1;
             dataToSend = _objectSpread(_objectSpread({}, formData), {}, {
               price: price
-            }); // Send the form data to the server
-            _context.next = 4;
+            });
+            _context.next = 5;
             return fetch('/send-email', {
               method: 'POST',
               headers: {
@@ -89,28 +99,29 @@ var DynamicForm = function DynamicForm() {
               },
               body: JSON.stringify(dataToSend)
             });
-          case 4:
+          case 5:
             response = _context.sent;
             if (response.status === 200) {
-              alert('Form submitted successfully!');
-              // You can also reset the form, navigate the user to another page, etc.
-              // setStep(0);
-              // setFormData({});
+              setSubmitSuccess(true);
             } else {
               alert('Failed to submit the form. Please try again.');
             }
-            _context.next = 12;
+            _context.next = 13;
             break;
-          case 8:
-            _context.prev = 8;
-            _context.t0 = _context["catch"](0);
+          case 9:
+            _context.prev = 9;
+            _context.t0 = _context["catch"](1);
             console.error('Error submitting form:', _context.t0);
             alert('An error occurred while submitting the form. Please try again.');
-          case 12:
+          case 13:
+            _context.prev = 13;
+            setLoading(false);
+            return _context.finish(13);
+          case 16:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 8]]);
+      }, _callee, null, [[1, 9, 13, 16]]);
     }));
     return function onSubmit() {
       return _ref.apply(this, arguments);
@@ -279,7 +290,22 @@ var DynamicForm = function DynamicForm() {
   };
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "dynamic-form"
+  }, submitSuccess ? /*#__PURE__*/_react["default"].createElement("div", {
+    className: "success-page"
   }, /*#__PURE__*/_react["default"].createElement("div", {
+    className: "details-container"
+  }, /*#__PURE__*/_react["default"].createElement("h1", {
+    className: "success-message"
+  }, "We Have Received Your Details!"), /*#__PURE__*/_react["default"].createElement("p", {
+    className: "success-description"
+  }, "Thank you for your submission. Our team will review it and get back to you soon!"), /*#__PURE__*/_react["default"].createElement("a", {
+    href: "/",
+    className: "go-home-link"
+  }, "Go Back to Home")), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "image-container"
+  })) : /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, loading && /*#__PURE__*/_react["default"].createElement("div", {
+    className: "spinner"
+  }), /*#__PURE__*/_react["default"].createElement("div", {
     id: "price-display"
   }, "Current Estimated Total Price: $", price), /*#__PURE__*/_react["default"].createElement(_reactTransitionGroup.CSSTransition, {
     "in": true,
@@ -299,6 +325,6 @@ var DynamicForm = function DynamicForm() {
     currentStep: step,
     totalSteps: 9,
     stepValidations: stepValidations
-  }));
+  })));
 };
 var _default = exports["default"] = DynamicForm;
