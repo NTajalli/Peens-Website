@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _react = _interopRequireWildcard(require("react"));
 require("./Step7.css");
+var _priceConstants = require("../priceConstants");
+var _calculateTotalPrice = require("../calculateTotalPrice");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -19,23 +21,24 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-var options = [{
-  name: 'Normal',
-  price: 'US$ 0'
-}, {
-  name: 'Fluor',
-  price: 'US$ 50'
-}, {
-  name: 'Metallic',
-  price: 'US$ 50'
-}, {
-  name: 'Holographic',
-  price: 'US$ 50'
-}];
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; } // import the color prices
+// import the common calculateTotalPrice function
+
 var Step7 = function Step7(_ref) {
   var formData = _ref.formData,
-    setFormData = _ref.setFormData;
+    setFormData = _ref.setFormData,
+    price = _ref.price,
+    setPrice = _ref.setPrice;
+  var options = Object.entries(_priceConstants.PRICES_COLORS).map(function (_ref2) {
+    var _ref3 = _slicedToArray(_ref2, 2),
+      name = _ref3[0],
+      price = _ref3[1];
+    return {
+      name: name,
+      price: price
+    };
+  });
+  Step7.questions = [];
   var initialColors = formData.colors || options.reduce(function (acc, option) {
     acc[option.name] = {
       selected: option.name === "Normal",
@@ -47,10 +50,15 @@ var Step7 = function Step7(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     selectedOptions = _useState2[0],
     setSelectedOptions = _useState2[1];
-  var toggleOption = function toggleOption(name, price) {
+  (0, _react.useEffect)(function () {
+    setPrice((0, _calculateTotalPrice.calculateTotalPrice)(_objectSpread(_objectSpread({}, formData), {}, {
+      colors: selectedOptions
+    })));
+  }, [selectedOptions]);
+  var toggleOption = function toggleOption(name, optionPrice) {
     var updatedOptions = _objectSpread(_objectSpread({}, selectedOptions), {}, _defineProperty({}, name, {
       selected: !selectedOptions[name].selected,
-      price: price
+      price: optionPrice
     }));
     setSelectedOptions(updatedOptions);
     setFormData(function (prevData) {
@@ -76,7 +84,7 @@ var Step7 = function Step7(_ref) {
       }
     }, selectedOptions[option.name].selected ? '✓' : '×'), /*#__PURE__*/_react["default"].createElement("div", {
       className: "color-price"
-    }, option.price));
+    }, "US$ ", option.price));
   })));
 };
 var _default = exports["default"] = Step7;

@@ -20,6 +20,8 @@ var nodemailer = require('nodemailer');
 var sgMail = require('@sendgrid/mail');
 var MemoryStore = require('session-memory-store')(session);
 var AWS = require('aws-sdk');
+var archiver = require('archiver');
+var axios = require('axios');
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -209,12 +211,7 @@ app.post('/save-form-data', function (req, res) {
       data: req.body,
       createdAt: new Date()
     };
-    db.collection('tempFormData').insertOne(formData, function (err, result) {
-      if (err) {
-        throw err;
-      }
-      res.sendStatus(200);
-    });
+    res.sendStatus(200);
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -243,7 +240,7 @@ app.post('/contact', function (req, res) {
     message = _req$body.message;
   var mailOptions = {
     from: "noreplympdecalsus@gmail.com",
-    to: 'noahtajalli@outlook.com',
+    to: process.env.TO_EMAIL,
     subject: "Message from ".concat(name),
     text: message,
     html: "<p>".concat(message, "</p>")
@@ -258,6 +255,7 @@ app.post('/contact', function (req, res) {
     }
   });
 });
+var recentFiles = [];
 app.post('/send-email', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
     var formData, _iterator, _step, _file, _buffer, _fileKey, _s3Url, file, buffer, fileKey, s3Url, htmlContent, htmlKey, htmlS3Url, msg;
@@ -307,7 +305,7 @@ app.post('/send-email', /*#__PURE__*/function () {
           file.s3Url = s3Url;
 
           // 2. Generate the HTML content with updated formData
-          htmlContent = renderFormSummary(formData); // 3. Upload the generated HTML content to S3
+          htmlContent = renderFormSummary(formData, formData.price); // 3. Upload the generated HTML content to S3
           htmlKey = "form-submissions/".concat(Date.now(), ".html");
           _context.next = 34;
           return uploadToS3(htmlContent, htmlKey, 'text/html');

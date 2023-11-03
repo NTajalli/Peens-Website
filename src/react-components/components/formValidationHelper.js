@@ -2,6 +2,7 @@ export const validateInputs = (questions, formData) => {
     let validationErrors = {};
     let allValid = true;
     
+
     questions.forEach(q => {
         if (q.type === 'select' && (formData[q.id] === 'SELECT ONE' || !formData[q.id])) {
             validationErrors[q.id] = `Please select an option for ${q.label}`;

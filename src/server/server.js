@@ -11,6 +11,8 @@ const nodemailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
 const MemoryStore = require('session-memory-store')(session);
 const AWS = require('aws-sdk');
+const archiver = require('archiver');
+const axios = require('axios');
 
 AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
@@ -154,13 +156,8 @@ app.post('/save-form-data', (req, res) => {
             data: req.body,
             createdAt: new Date()
         };
-
-        db.collection('tempFormData').insertOne(formData, (err, result) => {
-            if (err) {
-                throw err;
-            }
-            res.sendStatus(200);
-        });
+        res.sendStatus(200);
+        
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to save form data" });
@@ -191,7 +188,7 @@ app.post('/contact', (req, res) => {
 
     const mailOptions = {
         from: "noreplympdecalsus@gmail.com",
-        to: 'noahtajalli@outlook.com',
+        to: process.env.TO_EMAIL,
         subject: `Message from ${name}`,
         text: message,
         html: `<p>${message}</p>`
@@ -208,10 +205,12 @@ app.post('/contact', (req, res) => {
     });
 });
 
+let recentFiles = [];
+
 app.post('/send-email', async (req, res) => {
     try {
         const formData = req.body;
-
+            
         // 1. Upload each image in referenceFiles to S3
         for (const file of formData.referenceImages) {
             const buffer = Buffer.from(file.dataURL.split(',')[1], 'base64'); // Convert data URL to buffer
@@ -227,7 +226,7 @@ app.post('/send-email', async (req, res) => {
         file.s3Url = s3Url;
 
         // 2. Generate the HTML content with updated formData
-        const htmlContent = renderFormSummary(formData);
+        const htmlContent = renderFormSummary(formData, formData.price);
 
         // 3. Upload the generated HTML content to S3
         const htmlKey = `form-submissions/${Date.now()}.html`;

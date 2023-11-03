@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _QuestionInput = _interopRequireDefault(require("../QuestionInput"));
-var _formValidationHelper = require("../formValidationHelper");
+var _calculateTotalPrice = require("../calculateTotalPrice");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -24,7 +24,9 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Step1 = function Step1(_ref) {
   var formData = _ref.formData,
-    setFormData = _ref.setFormData;
+    setFormData = _ref.setFormData,
+    price = _ref.price,
+    setPrice = _ref.setPrice;
   var _useState = (0, _react.useState)({}),
     _useState2 = _slicedToArray(_useState, 2),
     validationState = _useState2[0],
@@ -38,8 +40,14 @@ var Step1 = function Step1(_ref) {
   var handleInputChange = function handleInputChange(id, value) {
     var updatedData = _objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, id, value));
     setFormData(updatedData);
+    // Use the centralized price calculator after each change
+    setPrice((0, _calculateTotalPrice.calculateTotalPrice)(updatedData));
   };
   Step1.questions = questions;
+  (0, _react.useEffect)(function () {
+    // Recalculate the price when component mounts
+    setPrice((0, _calculateTotalPrice.calculateTotalPrice)(formData));
+  }, [formData]);
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
     className: "step-title"
   }, "BIKE SIZE"), questions.map(function (q) {

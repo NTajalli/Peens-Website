@@ -19,6 +19,8 @@ const DynamicForm = () => {
     const [formData, setFormData] = useState({});
     const [validationState, setValidationState] = useState({});
     const [stepValidations, setStepValidations] = useState([false, false, false, false]);
+    const [price, setPrice] = useState(0);
+
 
     useEffect(() => {
         fetch('/get-form-data')
@@ -29,13 +31,19 @@ const DynamicForm = () => {
 
     const onSubmit = async () => {
         try {
+
+            const dataToSend = {
+                ...formData,
+                price
+            };
+
             // Send the form data to the server
             const response = await fetch('/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(dataToSend),
             });
     
             if (response.status === 200) {
@@ -70,7 +78,7 @@ const DynamicForm = () => {
             case 5:
                 return Step6.questions;
             case 6:
-                return [];
+                return Step7.questions;
             case 7:
                 return Step8.questions;
             case 8:
@@ -123,30 +131,33 @@ const DynamicForm = () => {
     const renderStep = () => {
         switch (step) {
             case 0:
-                return <Step1 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step1 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             case 1:
-                return <Step2 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step2 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             case 2:
-                return <Step3 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step3 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             case 3:
-                return <Step4 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step4 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             case 4:
-                return <Step5 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step5 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             case 5:
-                return <Step6 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step6 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             case 6:
-                return <Step7 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step7 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             case 7:
-                return <Step8 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step8 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             case 8:
-                return <Step9 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} />;
+                return <Step9 formData={formData} setFormData={setFormData} validationState={validationState} setValidationState={setValidationState} price={price} setPrice={setPrice} />;
             default:
-                return <FormSummary data={formData} />;
+                return <FormSummary data={formData} price={price} />;
         }
     };
 
     return (
         <div className="dynamic-form">
+            <div id="price-display">
+                Current Estimated Total Price: ${price}
+            </div>
             <CSSTransition in={true} appear={true} timeout={1500} classNames="fade" key={step} unmountOnExit>
                 {(state) => (
                     <div className="step-wrapper">

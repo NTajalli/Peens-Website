@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Step7.css';
+import { PRICES_COLORS } from '../priceConstants'; // import the color prices
+import { calculateTotalPrice } from '../calculateTotalPrice'; // import the common calculateTotalPrice function
 
-const options = [
-    { name: 'Normal', price: 'US$ 0' },
-    { name: 'Fluor', price: 'US$ 50' },
-    { name: 'Metallic', price: 'US$ 50' },
-    { name: 'Holographic', price: 'US$ 50' },
-];
-
-const Step7 = ({ formData, setFormData }) => {
+const Step7 = ({ formData, setFormData, price, setPrice }) => {
+    const options = Object.entries(PRICES_COLORS).map(([name, price]) => ({ name, price }));
+    Step7.questions = [];
     const initialColors = formData.colors || options.reduce((acc, option) => {
         acc[option.name] = { selected: option.name === "Normal", price: option.price };
         return acc;
@@ -16,10 +13,14 @@ const Step7 = ({ formData, setFormData }) => {
     
     const [selectedOptions, setSelectedOptions] = useState(initialColors);
 
-    const toggleOption = (name, price) => {
+    useEffect(() => {
+        setPrice(calculateTotalPrice({ ...formData, colors: selectedOptions })); 
+    }, [selectedOptions]);
+
+    const toggleOption = (name, optionPrice) => {
         const updatedOptions = {
             ...selectedOptions,
-            [name]: { selected: !selectedOptions[name].selected, price }
+            [name]: { selected: !selectedOptions[name].selected, price: optionPrice }
         };
         setSelectedOptions(updatedOptions);
         setFormData(prevData => ({
@@ -41,7 +42,7 @@ const Step7 = ({ formData, setFormData }) => {
                         >
                             {selectedOptions[option.name].selected ? '✓' : '×'}
                         </button>
-                        <div className="color-price">{option.price}</div>
+                        <div className="color-price">US$ {option.price}</div>
                     </div>
                 ))}
             </div>

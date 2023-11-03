@@ -264,7 +264,7 @@ footer a.logo-center {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     min-height: 80vh;
     font-family: Arial, sans-serif;
 }
@@ -443,6 +443,21 @@ td.step-divider:first-child {
     color: red; /* Choose your desired text color for the step divider */
     padding: 10px 0; /* Adds some padding for visual separation */
     border-top: 2px solid #444; /* Adds a border on top for more visual separation */
+}
+
+#price-display {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 10px;
+    min-width: 100vw;
+    text-align: center;
+}
+
+button, input, optgroup, select, textarea {
+    font-family: system-ui;
+    font-weight: 500;
 }
 
 

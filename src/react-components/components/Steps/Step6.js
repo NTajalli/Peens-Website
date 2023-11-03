@@ -3,7 +3,7 @@ import './Step6.css';
 
 const Step6 = ({ formData, setFormData }) => {
     const [afterMarketPlastics, setAfterMarketPlastics] = useState(formData.afterMarketPlastics || "");
-    Step6.questions = [];
+    
 
 
     const handleAfterMarketPlasticsChange = (event) => {
@@ -15,6 +15,7 @@ const Step6 = ({ formData, setFormData }) => {
         }));
     };
 
+    Step6.questions = [];
     return (
         <>
             <h1 className="step-title">AFTER MARKET PARTS</h1>

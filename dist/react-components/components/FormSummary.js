@@ -7,13 +7,30 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var React = require('react');
+var PRICES_BIKE_SIZE = {
+  'Pit Bike 50cc': 189.99,
+  'Mini Bike 65-85cc': 219.99,
+  'Big Bikes 125-400cc': 249.99
+};
+var PRICES_COLORS = {
+  'Normal': 0,
+  'Fluor': 50,
+  'Metallic': 50,
+  'Holographic': 50
+};
+var PRICES_FINISHES = {
+  'GLOSSY (+ $0)': 0,
+  'MATTE (+ $0)': 0,
+  'TEXTURED (+ $40)': 40
+};
 var camelCaseToSpaceSeparated = function camelCaseToSpaceSeparated(text) {
   return text.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) {
     return str.toUpperCase();
   });
 };
 var FormSummary = function FormSummary(_ref) {
-  var data = _ref.data;
+  var data = _ref.data,
+    price = _ref.price;
   var steps = [{
     title: "BIKE SIZE",
     keys: ["bikeSize"]
@@ -41,28 +58,30 @@ var FormSummary = function FormSummary(_ref) {
   }, {
     title: "CUSTOMER INFORMATION",
     keys: ["name", "email", "address", "city", "state", "country"]
-  }
-  // Add other steps and their keys here...
-  ];
-
-  console.log(data);
+  }];
   return /*#__PURE__*/React.createElement("div", {
     className: "form-summary"
   }, /*#__PURE__*/React.createElement("h1", {
     className: "step-title"
   }, "Review Your Customizations"), /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Description"), /*#__PURE__*/React.createElement("th", null, "Information"), /*#__PURE__*/React.createElement("th", null, "Price"))), /*#__PURE__*/React.createElement("tbody", null, steps.map(function (step) {
-    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", {
-      key: step.title + "-divider"
-    }, /*#__PURE__*/React.createElement("td", {
+    return /*#__PURE__*/React.createElement(React.Fragment, {
+      key: step.title
+    }, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
       colSpan: "3",
       className: "step-divider"
     }, step.title)), step.keys.map(function (key) {
       var value = data[key];
+      var price = "";
+      if (key === 'bikeSize') {
+        price = "$" + PRICES_BIKE_SIZE[value] || "";
+      } else if (key === 'finishes') {
+        price = "$" + PRICES_FINISHES[value] || "";
+      }
       var formattedKey = camelCaseToSpaceSeparated(key);
       if (typeof value === 'string' || typeof value === 'number') {
         return /*#__PURE__*/React.createElement("tr", {
           key: key
-        }, /*#__PURE__*/React.createElement("td", null, formattedKey), /*#__PURE__*/React.createElement("td", null, value), /*#__PURE__*/React.createElement("td", null));
+        }, /*#__PURE__*/React.createElement("td", null, formattedKey), /*#__PURE__*/React.createElement("td", null, value), /*#__PURE__*/React.createElement("td", null, price));
       } else if (key === 'colors') {
         return /*#__PURE__*/React.createElement("tr", {
           key: key
@@ -81,7 +100,7 @@ var FormSummary = function FormSummary(_ref) {
           return colorValue.selected ? /*#__PURE__*/React.createElement("div", {
             key: index,
             className: "dashed-list"
-          }, colorValue.price) : null;
+          }, "$", PRICES_COLORS[colorKey]) : null;
         })));
       } else if (Array.isArray(value)) {
         return /*#__PURE__*/React.createElement("tr", {
@@ -93,7 +112,7 @@ var FormSummary = function FormSummary(_ref) {
           }, img.name);
         })), /*#__PURE__*/React.createElement("td", null));
       } else if (!value) {
-        /*#__PURE__*/React.createElement("tr", {
+        return /*#__PURE__*/React.createElement("tr", {
           key: key
         }, /*#__PURE__*/React.createElement("td", null, "ERROR"), /*#__PURE__*/React.createElement("td", null, "ERROR"), /*#__PURE__*/React.createElement("td", null));
       } else if (value.dataURL) {
@@ -101,7 +120,8 @@ var FormSummary = function FormSummary(_ref) {
           key: key
         }, /*#__PURE__*/React.createElement("td", null, formattedKey), /*#__PURE__*/React.createElement("td", null, value.name), /*#__PURE__*/React.createElement("td", null));
       }
+      return null;
     }));
-  }))));
+  }), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Estimated Total Price"), /*#__PURE__*/React.createElement("th", null), /*#__PURE__*/React.createElement("th", null, "$", price)))));
 };
 module.exports = FormSummary;

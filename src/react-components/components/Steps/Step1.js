@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import QuestionInput from '../QuestionInput';
-import { validateInputs } from '../formValidationHelper';
+import { calculateTotalPrice } from '../calculateTotalPrice';
 
 
-const Step1 = ({ formData, setFormData }) => {
+const Step1 = ({ formData, setFormData, price, setPrice }) => {
     const [validationState, setValidationState] = useState({});
 
     const questions = [
@@ -13,9 +13,16 @@ const Step1 = ({ formData, setFormData }) => {
     const handleInputChange = (id, value) => {
         const updatedData = { ...formData, [id]: value };
         setFormData(updatedData);
-        };
-     
+        // Use the centralized price calculator after each change
+        setPrice(calculateTotalPrice(updatedData));
+    };
+
     Step1.questions = questions;
+
+    useEffect(() => {
+        // Recalculate the price when component mounts
+        setPrice(calculateTotalPrice(formData));
+    }, [formData]);
 
     return (
         <>

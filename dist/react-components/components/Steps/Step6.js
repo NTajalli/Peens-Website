@@ -27,7 +27,6 @@ var Step6 = function Step6(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     afterMarketPlastics = _useState2[0],
     setAfterMarketPlastics = _useState2[1];
-  Step6.questions = [];
   var handleAfterMarketPlasticsChange = function handleAfterMarketPlasticsChange(event) {
     var text = event.target.value;
     setAfterMarketPlastics(text);
@@ -37,6 +36,7 @@ var Step6 = function Step6(_ref) {
       });
     });
   };
+  Step6.questions = [];
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
     className: "step-title"
   }, "AFTER MARKET PARTS"), /*#__PURE__*/_react["default"].createElement("div", {

@@ -1,11 +1,30 @@
-const React = require('react');
+const React = require('react')
+
+const PRICES_BIKE_SIZE = {
+    'Pit Bike 50cc': 189.99,
+    'Mini Bike 65-85cc': 219.99,
+    'Big Bikes 125-400cc': 249.99
+};
+
+const PRICES_COLORS = {
+     'Normal': 0,
+     'Fluor': 50,
+     'Metallic': 50,
+     'Holographic': 50,
+} ;
+
+const PRICES_FINISHES = {
+    'GLOSSY (+ $0)': 0,
+    'MATTE (+ $0)': 0,
+    'TEXTURED (+ $40)': 40,
+};
 
 
 const camelCaseToSpaceSeparated = (text) => {
     return text.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
 };
 
-const FormSummary = ({ data }) => {
+const FormSummary = ({ data, price}) => {
     const steps = [
         {
             title: "BIKE SIZE",
@@ -43,10 +62,8 @@ const FormSummary = ({ data }) => {
             title: "CUSTOMER INFORMATION",
             keys: ["name", "email", "address", "city", "state", "country"]
         }
-        // Add other steps and their keys here...
     ];
 
-    console.log(data)
     return (
         <div className="form-summary">
             <h1 className='step-title'>Review Your Customizations</h1>
@@ -60,19 +77,27 @@ const FormSummary = ({ data }) => {
                 </thead>
                 <tbody>
                     {steps.map(step => (
-                        <>
-                            <tr key={step.title + "-divider"}>
+                        <React.Fragment key={step.title}>
+                            <tr>
                                 <td colSpan="3" className="step-divider">{step.title}</td>
                             </tr>
                             {step.keys.map(key => {
                                 const value = data[key];
+                                let price = "";
+
+                                if (key === 'bikeSize') {
+                                    price = "$" + PRICES_BIKE_SIZE[value] || "";
+                                } else if (key === 'finishes') {
+                                    price = "$" + PRICES_FINISHES[value] || "";
+                                }
+
                                 const formattedKey = camelCaseToSpaceSeparated(key);
                                 if (typeof value === 'string' || typeof value === 'number') {
                                     return (
                                         <tr key={key}>
                                             <td>{formattedKey}</td>
                                             <td>{value}</td>
-                                            <td></td>
+                                            <td>{price}</td>
                                         </tr>
                                     );
                                 } else if (key === 'colors') {
@@ -86,7 +111,7 @@ const FormSummary = ({ data }) => {
                                             </td>
                                             <td>
                                                 {Object.entries(value).map(([colorKey, colorValue], index) =>
-                                                    colorValue.selected ? <div key={index} className="dashed-list">{colorValue.price}</div> : null
+                                                    colorValue.selected ? <div key={index} className="dashed-list">${PRICES_COLORS[colorKey]}</div> : null
                                                 )}
                                             </td>
                                         </tr>
@@ -98,15 +123,19 @@ const FormSummary = ({ data }) => {
                                             <td>
                                                 {value.map((img, index) => <div key={index} className="dashed-list">{img.name}</div>)}
                                             </td>
-                                            <td></td>
+                                            <td>
+
+                                            </td>
                                         </tr>
                                     );
                                 } else if (!value) {
-                                    <tr key={key}>
+                                    return (
+                                        <tr key={key}>
                                             <td>{"ERROR"}</td>
                                             <td>{"ERROR"}</td>
                                             <td></td>
                                         </tr>
+                                    );
                                 } else if (value.dataURL) {
                                     return (
                                         <tr key={key}>
@@ -116,9 +145,15 @@ const FormSummary = ({ data }) => {
                                         </tr>
                                     );
                                 }
+                                return null; 
                             })}
-                        </>
+                        </React.Fragment>
                     ))}
+                    <tr>
+                        <th>Estimated Total Price</th>
+                        <th></th>
+                        <th>${price}</th>
+                    </tr>
                 </tbody>
             </table>
         </div>
