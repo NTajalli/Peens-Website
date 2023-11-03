@@ -314,7 +314,7 @@ app.post('/send-email', /*#__PURE__*/function () {
           // 4. Send an email with the S3 link to the HTML content
           msg = {
             from: "noreplympdecalsus@gmail.com",
-            to: 'noahtajalli@outlook.com',
+            to: process.env.TO_EMAIL,
             subject: 'New form submission',
             html: "Here's the link to the form submission: <a href=\"".concat(htmlS3Url, "\">").concat(htmlS3Url, "</a>"),
             attachments: [] // You can still add attachments if needed

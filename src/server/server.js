@@ -235,7 +235,7 @@ app.post('/send-email', async (req, res) => {
         // 4. Send an email with the S3 link to the HTML content
         const msg = {
             from: "noreplympdecalsus@gmail.com",
-            to: 'noahtajalli@outlook.com',
+            to: process.env.TO_EMAIL,
             subject: 'New form submission',
             html: `Here's the link to the form submission: <a href="${htmlS3Url}">${htmlS3Url}</a>`,
             attachments: []  // You can still add attachments if needed
