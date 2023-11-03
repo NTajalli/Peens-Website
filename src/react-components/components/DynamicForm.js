@@ -25,13 +25,6 @@ const DynamicForm = () => {
     const [loading, setLoading] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
 
-    useEffect(() => {
-        fetch('/get-form-data')
-            .then(res => res.json())
-            .then(data => setFormData(data))
-            .catch(error => console.error('Error fetching form data:', error));
-    }, []);
-
     const onSubmit = async () => {
         setLoading(true);
         try {

@@ -71,15 +71,6 @@ var DynamicForm = function DynamicForm() {
     _useState14 = _slicedToArray(_useState13, 2),
     submitSuccess = _useState14[0],
     setSubmitSuccess = _useState14[1];
-  (0, _react.useEffect)(function () {
-    fetch('/get-form-data').then(function (res) {
-      return res.json();
-    }).then(function (data) {
-      return setFormData(data);
-    })["catch"](function (error) {
-      return console.error('Error fetching form data:', error);
-    });
-  }, []);
   var onSubmit = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var dataToSend, response;

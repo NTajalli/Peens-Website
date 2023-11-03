@@ -187,11 +187,12 @@ app.post('/contact', (req, res) => {
     const { name, email, message } = req.body;
 
     const mailOptions = {
-        from: "noreplympdecalsus@gmail.com",
+        from: process.env.FROM_EMAIL,
         to: process.env.TO_EMAIL,
         subject: `Message from ${name}`,
         text: message,
-        html: `<p>${message}</p>`
+        html: `<h1>Hi Pedro</h1><p>${name} is trying to get in contact with you regarding MP Decals USA! Here is their message: </p><p>${message}</p>
+        <p>Their email is ${email}</p>. `
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -234,10 +235,10 @@ app.post('/send-email', async (req, res) => {
 
         // 4. Send an email with the S3 link to the HTML content
         const msg = {
-            from: "noreplympdecalsus@gmail.com",
+            from: process.env.FROM_EMAIL,
             to: process.env.TO_EMAIL,
             subject: 'New form submission',
-            html: `Here's the link to the form submission: <a href="${htmlS3Url}">${htmlS3Url}</a>`,
+            html: `<h1>Hi Pedro</h1> <p>You have a new decal request submission!</p> <p>Here is the Link: <a href="${htmlS3Url}">${htmlS3Url}</a></p>`,
             attachments: []  // You can still add attachments if needed
         };
 

@@ -239,11 +239,11 @@ app.post('/contact', function (req, res) {
     email = _req$body.email,
     message = _req$body.message;
   var mailOptions = {
-    from: "noreplympdecalsus@gmail.com",
+    from: process.env.FROM_EMAIL,
     to: process.env.TO_EMAIL,
     subject: "Message from ".concat(name),
     text: message,
-    html: "<p>".concat(message, "</p>")
+    html: "<h1>Hi Pedro</h1><p>".concat(name, " is trying to get in contact with you regarding MP Decals USA! Here is their message: </p><p>").concat(message, "</p>\n        <p>Their email is ").concat(email, "</p>. ")
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
@@ -313,10 +313,10 @@ app.post('/send-email', /*#__PURE__*/function () {
           htmlS3Url = _context.sent;
           // 4. Send an email with the S3 link to the HTML content
           msg = {
-            from: "noreplympdecalsus@gmail.com",
+            from: process.env.FROM_EMAIL,
             to: process.env.TO_EMAIL,
             subject: 'New form submission',
-            html: "Here's the link to the form submission: <a href=\"".concat(htmlS3Url, "\">").concat(htmlS3Url, "</a>"),
+            html: "<h1>Hi Pedro</h1> <p>You have a new decal request submission!</p> <p>Here is the Link: <a href=\"".concat(htmlS3Url, "\">").concat(htmlS3Url, "</a></p>"),
             attachments: [] // You can still add attachments if needed
           };
 
