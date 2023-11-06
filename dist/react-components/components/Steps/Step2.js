@@ -33,7 +33,7 @@ var Step2 = function Step2(_ref) {
     type: 'select',
     label: 'MAKE',
     id: 'make',
-    options: ['SELECT ONE', 'BETA', 'COBRA', 'GAS GAS', 'HONDA', 'HUSABERG', 'HUSQVARNA', 'KAWASAKE', 'KTM', 'SHERCO', 'SUZUKI', 'TM', 'YAMAHA']
+    options: ['SELECT ONE', 'BETA', 'COBRA', 'GAS GAS', 'HONDA', 'HUSABERG', 'HUSQVARNA', 'KAWASAKI', 'KTM', 'SHERCO', 'SUZUKI', 'TM', 'YAMAHA']
   }, {
     type: 'text',
     label: 'MODEL',

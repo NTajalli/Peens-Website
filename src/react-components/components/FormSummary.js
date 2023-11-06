@@ -8,15 +8,12 @@ const PRICES_BIKE_SIZE = {
 
 const PRICES_COLORS = {
      'Normal': 0,
-     'Fluor': 50,
-     'Metallic': 50,
      'Holographic': 50,
 } ;
 
 const PRICES_FINISHES = {
-    'GLOSSY (+ $0)': 0,
-    'MATTE (+ $0)': 0,
-    'TEXTURED (+ $40)': 40,
+    'GLOSSY': 0,
+    'MATTE': 0,
 };
 
 
@@ -150,9 +147,17 @@ const FormSummary = ({ data, price}) => {
                         </React.Fragment>
                     ))}
                     <tr>
+                        <td colSpan="3" className="step-divider">Shipping</td>
+                    </tr>
+                    <tr>
+                        <td>Shipping Cost</td>
+                        <td></td>
+                        <td>${price >= 100 ? 0 : 20}</td>
+                    </tr>
+                    <tr>
                         <th>Estimated Total Price</th>
                         <th></th>
-                        <th>${price}</th>
+                        <th>${price >= 100 ? price : price + 20}</th>
                     </tr>
                 </tbody>
             </table>

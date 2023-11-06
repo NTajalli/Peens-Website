@@ -24,8 +24,8 @@ var validateInputs = exports.validateInputs = function validateInputs(questions,
   });
 
   // Additional case to handle validation for Step7
-  if (formData.colors && !formData.colors.Normal.selected) {
-    validationErrors.colors = "Normal color option must be selected.";
+  if (formData.colors && !formData.colors.Standard.selected) {
+    validationErrors.colors = "Standard color option must be selected.";
     allValid = false;
   }
   return {

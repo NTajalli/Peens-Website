@@ -41,7 +41,7 @@ var Step7 = function Step7(_ref) {
   Step7.questions = [];
   var initialColors = formData.colors || options.reduce(function (acc, option) {
     acc[option.name] = {
-      selected: option.name === "Normal",
+      selected: option.name === "Standard",
       price: option.price
     };
     return acc;

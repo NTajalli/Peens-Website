@@ -6,7 +6,7 @@ const Step8 = ({ formData, setFormData, price, setPrice }) => {
     const [validationState, setValidationState] = useState({});
 
     const questions = [
-        { type: 'select', label: 'LAMINANT FINISHES', id: 'finishes', options: ['SELECT ONE', 'GLOSSY (+ $0)', 'MATTE (+ $0)', 'TEXTURED (+ $40)']}
+        { type: 'select', label: 'LAMINANT FINISHES', id: 'finishes', options: ['SELECT ONE', 'GLOSSY', 'MATTE']}
     ];
 
     const handleInputChange = (id, value) => {

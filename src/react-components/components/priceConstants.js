@@ -5,14 +5,11 @@ export const PRICES_BIKE_SIZE = {
 };
 
 export const PRICES_COLORS = {
-     'Normal': 0,
-     'Fluor': 50,
-     'Metallic': 50,
+     'Standard': 0,
      'Holographic': 50,
 } ;
 
 export const PRICES_FINISHES = {
-    'GLOSSY (+ $0)': 0,
-    'MATTE (+ $0)': 0,
-    'TEXTURED (+ $40)': 40,
+    'GLOSSY': 0,
+    'MATTE': 0,
 };

@@ -14,14 +14,11 @@ var PRICES_BIKE_SIZE = {
 };
 var PRICES_COLORS = {
   'Normal': 0,
-  'Fluor': 50,
-  'Metallic': 50,
   'Holographic': 50
 };
 var PRICES_FINISHES = {
-  'GLOSSY (+ $0)': 0,
-  'MATTE (+ $0)': 0,
-  'TEXTURED (+ $40)': 40
+  'GLOSSY': 0,
+  'MATTE': 0
 };
 var camelCaseToSpaceSeparated = function camelCaseToSpaceSeparated(text) {
   return text.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) {
@@ -122,6 +119,9 @@ var FormSummary = function FormSummary(_ref) {
       }
       return null;
     }));
-  }), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Estimated Total Price"), /*#__PURE__*/React.createElement("th", null), /*#__PURE__*/React.createElement("th", null, "$", price)))));
+  }), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+    colSpan: "3",
+    className: "step-divider"
+  }, "Shipping")), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, "Shipping Cost"), /*#__PURE__*/React.createElement("td", null), /*#__PURE__*/React.createElement("td", null, "$", price >= 100 ? 0 : 20)), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Estimated Total Price"), /*#__PURE__*/React.createElement("th", null), /*#__PURE__*/React.createElement("th", null, "$", price >= 100 ? price : price + 20)))));
 };
 module.exports = FormSummary;

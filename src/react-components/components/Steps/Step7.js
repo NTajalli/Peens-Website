@@ -7,7 +7,7 @@ const Step7 = ({ formData, setFormData, price, setPrice }) => {
     const options = Object.entries(PRICES_COLORS).map(([name, price]) => ({ name, price }));
     Step7.questions = [];
     const initialColors = formData.colors || options.reduce((acc, option) => {
-        acc[option.name] = { selected: option.name === "Normal", price: option.price };
+        acc[option.name] = { selected: option.name === "Standard", price: option.price };
         return acc;
     }, {});
     

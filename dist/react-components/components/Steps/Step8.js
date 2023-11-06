@@ -35,7 +35,7 @@ var Step8 = function Step8(_ref) {
     type: 'select',
     label: 'LAMINANT FINISHES',
     id: 'finishes',
-    options: ['SELECT ONE', 'GLOSSY (+ $0)', 'MATTE (+ $0)', 'TEXTURED (+ $40)']
+    options: ['SELECT ONE', 'GLOSSY', 'MATTE']
   }];
   var handleInputChange = function handleInputChange(id, value) {
     var updatedData = _objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, id, value));

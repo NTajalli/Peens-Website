@@ -164,7 +164,7 @@ const DynamicForm = () => {
                 <>
                     {loading && <div className="spinner"></div>}
                     <div id="price-display">
-                        Current Estimated Total Price: ${price}
+                        Current Estimated Price: ${price}
                     </div>
                     <CSSTransition in={true} appear={true} timeout={1500} classNames="fade" key={step} unmountOnExit>
                         {(state) => (

@@ -7,7 +7,7 @@ const Step2 = ({ formData, setFormData }) => {
     const [validationState, setValidationState] = useState({});
 
     const questions = [
-        { type: 'select', label: 'MAKE', id: 'make', options: ['SELECT ONE', 'BETA', 'COBRA', 'GAS GAS', 'HONDA', 'HUSABERG', 'HUSQVARNA', 'KAWASAKE', 'KTM', 'SHERCO', 'SUZUKI', 'TM', 'YAMAHA']},
+        { type: 'select', label: 'MAKE', id: 'make', options: ['SELECT ONE', 'BETA', 'COBRA', 'GAS GAS', 'HONDA', 'HUSABERG', 'HUSQVARNA', 'KAWASAKI', 'KTM', 'SHERCO', 'SUZUKI', 'TM', 'YAMAHA']},
         { type: 'text', label: 'MODEL', id: 'model' },
         { type: 'text', label: 'YEAR', id: 'year' },
         { type: 'select', label: 'STROKE', id: 'stroke', options: ['SELECT ONE', '2-Stroke', '4-Stroke'] }
