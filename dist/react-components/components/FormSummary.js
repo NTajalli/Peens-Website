@@ -78,7 +78,6 @@ var FormSummary = function FormSummary(_ref) {
     }, step.title)), step.keys.map(function (key) {
       var value = data[key];
       var price = "";
-      console.log("Key: ".concat(key, " Value: ").concat(value));
       if (key === 'bikeSize') {
         price = "$" + PRICES_BIKE_SIZE[value] || "";
       } else if (key === 'finishes') {

@@ -1,59 +1,40 @@
-<div class="homepage-container">
-    <div class="homepage-text-content">
-        <h1 class="customize-header" style="margin-bottom: 0; line-height: 5rem;">CUSTOMIZE</h1>
-        <h1 class="your-bike-header">YOUR BIKE</h1>
-        <p>FREE SHIPPING ON ORDERS OVER $100!</p>
-        <p>STAND OUT ON THE TRACK WITH PERSONALIZED DESIGNS!</p>
-        <a href="/form" class="btn btn-home">START HERE</a>
-    </div>
-    <div class="custom-carousel">
-        <div class="carousel-slides">
-            <div class="slide">
-                <img src="images/gallery1.jpg" alt="First slide">
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Image & Video Gallery</h2>
+    <div class="row masonry-grid">
+        <% media.forEach(item => { %>
+            <div class="col-md-4 masonry-item mb-4">
+                <div class="card">
+                    <% if(item.type === 'image') { %>
+                        <!-- Images are displayed directly within the card -->
+                        <img src="<%= item.path %>" class="card-img-top" alt="<%= item.title %>" loading="lazy">
+                    <% } else if(item.type === 'video') { %>
+                        <!-- Videos are displayed directly within the card -->
+                        <video controls class="card-img-top" preload="metadata">
+                            <source src="<%= item.path %>" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    <% } %>
+                </div>
             </div>
-            <div class="slide">
-                <img src="images/gallery2.jpg" alt="Second slide">
-            </div>
-            <div class="slide">
-                <img src="images/gallery3.jpg" alt="Third slide">
-            </div>
-            <div class="slide">
-                <img src="images/gallery5.jpg" alt="Fourth slide">
-            </div>
-            <div class="slide">
-                <img src="images/gallery6.jpg" alt="Fifth slide">
-            </div>
-            <div class="slide">
-                <img src="images/gallery8.jpg" alt="Sixth slide">
-            </div>
-            <div class="slide">
-                <img src="images/gallery9.jpg" alt="Seventh slide">
-            </div>
-            <div class="slide">
-                <img src="images/gallery10.jpg" alt="Eigth slide">
-            </div>
-        </div>
+        <% }) %>
     </div>
 </div>
+
+<!-- Include Masonry and initialize it -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script>
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
+    document.addEventListener("DOMContentLoaded", function() {
+        const grid = document.querySelector('.masonry-grid');
+        const msnry = new Masonry(grid, {
+            itemSelector: '.masonry-item',
+            columnWidth: '.masonry-item',
+            percentPosition: true
+        });
 
-    function showSlide(index) {
-        // Calculate the translateX value
-        const offset = -index * 100; // Negative because we're moving slides to the left
-        // Apply the transform to the slides container
-        document.querySelector('.carousel-slides').style.transform = `translateX(${offset}%)`;
-    }
-
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length; // Move to the next slide
-        showSlide(currentSlide);
-    }
-
-    // Automatically rotate slides every 5 seconds
-    setInterval(nextSlide, 5000);
-
-    // Initialize the carousel by showing the first slide
-    showSlide(currentSlide);
+        // Use imagesLoaded library if necessary to ensure that layout only happens after images are loaded
+        imagesLoaded(grid, function() {
+            msnry.layout();
+        });
+    });
 </script>
