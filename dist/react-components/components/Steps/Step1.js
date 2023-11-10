@@ -56,7 +56,8 @@ var Step1 = function Step1(_ref) {
       question: q,
       onInputChange: handleInputChange,
       initialValue: formData[q.id],
-      validationState: validationState
+      validationState: validationState,
+      setValidationState: setValidationState
     });
   }));
 };

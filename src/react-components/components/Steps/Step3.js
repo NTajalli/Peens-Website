@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import QuestionInput from '../QuestionInput';
-import { validateInputs } from '../formValidationHelper';
-
+import './Step3.css'; 
 
 const Step3 = ({ formData, setFormData }) => {
     const [validationState, setValidationState] = useState({});
@@ -15,10 +14,9 @@ const Step3 = ({ formData, setFormData }) => {
     ];
 
     const handleInputChange = (id, value) => {
-        const updatedData = { ...formData, [id]: value };
-        setFormData(updatedData);
+        setFormData({ ...formData, [id]: value });
     };
-    
+
     Step3.questions = questions;
 
     return (
@@ -27,13 +25,21 @@ const Step3 = ({ formData, setFormData }) => {
             <div className="step-content">
                 {questions.map((q) => (
                     <QuestionInput
-                        key={q.id}
-                        question={q}
-                        onInputChange={handleInputChange}
-                        initialValue={formData[q.id]}
-                        validationState={validationState}
-                    />
+                    key={q.id}
+                    question={q}
+                    onInputChange={handleInputChange}
+                    initialValue={formData[q.id]}
+                    validationState={validationState}
+                    setValidationState={setValidationState} // Pass this prop to QuestionInput
+                  />
                 ))}
+                <a href="images/MP_NUMBER_STYLE.png" target="_blank" rel="noopener noreferrer">
+                    <img
+                        src="images/MP_NUMBER_STYLE.png"
+                        alt="Number Style"
+                        className="reference-image"
+                    />
+                </a>
             </div>
         </>
     );

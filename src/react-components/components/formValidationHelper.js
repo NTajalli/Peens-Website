@@ -1,19 +1,27 @@
+import { validationRules } from './QuestionInput'
+
 export const validateInputs = (questions, formData) => {
     let validationErrors = {};
     let allValid = true;
-    
 
+        
     questions.forEach(q => {
-        if (q.type === 'select' && (formData[q.id] === 'SELECT ONE' || !formData[q.id])) {
+        const value = formData[q.id];
+        const rule = validationRules[q.id];
+
+        if (q.type === 'select' && (value === 'SELECT ONE' || !value)) {
             validationErrors[q.id] = `Please select an option for ${q.label}`;
             allValid = false;
-        } else if (q.type === 'singleImage' && (!formData[q.id] || !formData[q.id].dataURL)) {
+        } else if (q.type === 'singleImage' && (!value || !value.dataURL)) {
             validationErrors[q.id] = `${q.label} is required`;
             allValid = false;
-        } else if (q.type === 'image' && (!formData[q.id] || formData[q.id].length === 0)) {
-            validationErrors[q.id] = `${q.label} are required`;
+        } else if (q.type === 'image' && (!value || value.length === 0)) {
+            validationErrors[q.id] = `${q.label} is required`;
             allValid = false;
-        } else if (!formData[q.id]) {  
+        } else if (rule && !rule.validate(value)) {
+            validationErrors[q.id] = rule.message;
+            allValid = false;
+        } else if (!value) {
             validationErrors[q.id] = `${q.label} is required`;
             allValid = false;
         }
@@ -26,7 +34,7 @@ export const validateInputs = (questions, formData) => {
     }
 
     return {
-        isValid: allValid, 
+        isValid: allValid,
         errors: validationErrors
     };
 };

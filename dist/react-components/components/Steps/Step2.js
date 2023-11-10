@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _QuestionInput = _interopRequireDefault(require("../QuestionInput"));
-var _formValidationHelper = require("../formValidationHelper");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -48,8 +47,18 @@ var Step2 = function Step2(_ref) {
     id: 'stroke',
     options: ['SELECT ONE', '2-Stroke', '4-Stroke']
   }];
+  var validateYear = function validateYear(year) {
+    var currentYear = new Date().getFullYear();
+    return !isNaN(year) && year > 1900 && year <= currentYear;
+  };
   var handleInputChange = function handleInputChange(id, value) {
     var updatedData = _objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, id, value));
+
+    // Check for year validation
+    if (id === 'year') {
+      var isValidYear = validateYear(value);
+      setValidationState(_objectSpread(_objectSpread({}, validationState), {}, _defineProperty({}, id, isValidYear)));
+    }
     setFormData(updatedData);
   };
   Step2.questions = questions;
@@ -63,7 +72,8 @@ var Step2 = function Step2(_ref) {
       question: q,
       onInputChange: handleInputChange,
       initialValue: formData[q.id],
-      validationState: validationState
+      validationState: validationState,
+      setValidationState: setValidationState
     });
   })));
 };

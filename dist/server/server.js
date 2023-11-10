@@ -131,6 +131,18 @@ app.get('/form', function (req, res) {
   });
 });
 var images = [{
+  path: 'images/image0.jpg',
+  title: 'Image 1',
+  description: 'Some description about the image.'
+}, {
+  path: 'images/image1.jpg',
+  title: 'Image 2',
+  description: 'Another description.'
+}, {
+  path: 'images/image2.jpg',
+  title: 'Image 3',
+  description: 'Some description about the image.'
+}, {
   path: 'images/gallery1.jpg',
   title: 'Image 1',
   description: 'Some description about the image.'
@@ -143,11 +155,35 @@ var images = [{
   title: 'Image 3',
   description: 'Some description about the image.'
 }, {
+  path: 'images/image3.jpg',
+  title: 'Image 3',
+  description: 'Some description about the image.'
+}, {
+  path: 'images/image4.jpg',
+  title: 'Image 4',
+  description: 'Another description.'
+}, {
+  path: 'images/image5.jpg',
+  title: 'Image 5',
+  description: 'Some description about the image.'
+}, {
   path: 'images/gallery4.jpg',
   title: 'Image 4',
   description: 'Another description.'
 }, {
   path: 'images/gallery5.jpg',
+  title: 'Image 5',
+  description: 'Some description about the image.'
+}, {
+  path: 'images/image6.jpg',
+  title: 'Image 3',
+  description: 'Some description about the image.'
+}, {
+  path: 'images/image7.jpg',
+  title: 'Image 4',
+  description: 'Another description.'
+}, {
+  path: 'images/image8.jpg',
   title: 'Image 5',
   description: 'Some description about the image.'
 }, {
@@ -162,6 +198,18 @@ var images = [{
   path: 'images/gallery8.jpg',
   title: 'Image 8',
   description: 'Another description.'
+}, {
+  path: 'images/image9.jpg',
+  title: 'Image 3',
+  description: 'Some description about the image.'
+}, {
+  path: 'images/image10.jpg',
+  title: 'Image 4',
+  description: 'Another description.'
+}, {
+  path: 'images/image11.jpg',
+  title: 'Image 5',
+  description: 'Some description about the image.'
 }, {
   path: 'images/gallery9.jpg',
   title: 'Image 9',

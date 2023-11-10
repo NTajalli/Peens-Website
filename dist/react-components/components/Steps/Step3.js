@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _QuestionInput = _interopRequireDefault(require("../QuestionInput"));
-var _formValidationHelper = require("../formValidationHelper");
+require("./Step3.css");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -52,8 +52,7 @@ var Step3 = function Step3(_ref) {
     options: ['SELECT ONE', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6']
   }];
   var handleInputChange = function handleInputChange(id, value) {
-    var updatedData = _objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, id, value));
-    setFormData(updatedData);
+    setFormData(_objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, id, value)));
   };
   Step3.questions = questions;
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
@@ -66,8 +65,17 @@ var Step3 = function Step3(_ref) {
       question: q,
       onInputChange: handleInputChange,
       initialValue: formData[q.id],
-      validationState: validationState
+      validationState: validationState,
+      setValidationState: setValidationState // Pass this prop to QuestionInput
     });
-  })));
+  }), /*#__PURE__*/_react["default"].createElement("a", {
+    href: "images/MP_NUMBER_STYLE.png",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, /*#__PURE__*/_react["default"].createElement("img", {
+    src: "images/MP_NUMBER_STYLE.png",
+    alt: "Number Style",
+    className: "reference-image"
+  }))));
 };
 var _default = exports["default"] = Step3;

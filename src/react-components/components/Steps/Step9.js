@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import QuestionInput from '../QuestionInput';
-import { validateInputs } from '../formValidationHelper';
+import QuestionInput, { validateField } from '../QuestionInput';
 
+const validateEmail = (email) => {
+    // Simple regex for email validation
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
 
 const Step9 = ({ formData, setFormData }) => {
     const [validationState, setValidationState] = useState({});
@@ -17,8 +21,14 @@ const Step9 = ({ formData, setFormData }) => {
 
     const handleInputChange = (id, value) => {
         const updatedData = { ...formData, [id]: value };
+      
+        // Use the imported validation function
+        const validation = validateField(id, value);
+        setValidationState({ ...validationState, [id]: validation.isValid });
+      
+        // If valid, update the formData
         setFormData(updatedData);
-    };
+      };
     
     Step9.questions = questions;
 
@@ -33,6 +43,7 @@ const Step9 = ({ formData, setFormData }) => {
                         onInputChange={handleInputChange}
                         initialValue={formData[q.id]}
                         validationState={validationState}
+                        setValidationState={setValidationState}
                     />
                 ))}
             </div>

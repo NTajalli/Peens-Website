@@ -33,7 +33,10 @@ var MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 var Step4 = function Step4(_ref) {
   var formData = _ref.formData,
     setFormData = _ref.setFormData;
-  var _useState = (0, _react.useState)(formData.referenceImages || []),
+  var fileInputRef = (0, _react.useRef)();
+
+  // Initialize state only if formData.referenceImages is an array
+  var _useState = (0, _react.useState)(Array.isArray(formData.referenceImages) ? formData.referenceImages : []),
     _useState2 = _slicedToArray(_useState, 2),
     uploadingFiles = _useState2[0],
     setUploadingFiles = _useState2[1];
@@ -41,16 +44,23 @@ var Step4 = function Step4(_ref) {
     _useState4 = _slicedToArray(_useState3, 2),
     designDescription = _useState4[0],
     setDesignDescription = _useState4[1];
-  var fileInputRef = (0, _react.useRef)();
+  (0, _react.useEffect)(function () {
+    // This will ensure formData is initialized only if not already set
+    if (!Array.isArray(formData.referenceImages)) {
+      setFormData(function (prevData) {
+        return _objectSpread(_objectSpread({}, prevData), {}, {
+          referenceImages: [],
+          designDescription: prevData.designDescription || ""
+        });
+      });
+    }
+  }, [setFormData, formData.referenceImages, formData.designDescription]);
   Step4.questions = [{
     id: 'referenceImages',
     label: 'Reference Images',
     type: 'image',
     required: true
   }];
-  formData = _objectSpread(_objectSpread({}, formData), {}, {
-    referenceImages: formData.referenceImages || []
-  });
   var handleDesignDescriptionChange = function handleDesignDescriptionChange(event) {
     var text = event.target.value;
     setDesignDescription(text);
@@ -190,6 +200,17 @@ var Step4 = function Step4(_ref) {
       });
     }
   };
+  var referenceImageList = Array.isArray(formData.referenceImages) ? formData.referenceImages.map(function (file, index) {
+    return /*#__PURE__*/_react["default"].createElement("li", {
+      key: index,
+      className: "step4-file-item"
+    }, file.name, /*#__PURE__*/_react["default"].createElement("button", {
+      className: "step4-file-delete",
+      onClick: function onClick() {
+        return deleteFile(index, true);
+      }
+    }, "X"));
+  }) : [];
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
     className: "step-title"
   }, "REFERENCE IMAGES AND DETAILS"), /*#__PURE__*/_react["default"].createElement("div", {
@@ -213,17 +234,7 @@ var Step4 = function Step4(_ref) {
     onChange: handleImageChange
   }), /*#__PURE__*/_react["default"].createElement("ul", {
     className: "step4-file-list"
-  }, formData.referenceImages.map(function (file, index) {
-    return /*#__PURE__*/_react["default"].createElement("li", {
-      key: index,
-      className: "step4-file-item"
-    }, file.name, /*#__PURE__*/_react["default"].createElement("button", {
-      className: "step4-file-delete",
-      onClick: function onClick() {
-        return deleteFile(index, true);
-      }
-    }, "X"));
-  })), /*#__PURE__*/_react["default"].createElement("label", {
+  }, referenceImageList, " "), /*#__PURE__*/_react["default"].createElement("label", {
     className: "step4-logo-text-label"
   }, "DESIGN"), /*#__PURE__*/_react["default"].createElement("textarea", {
     className: "step5-logo-textbox" // Reusing the style from Step5

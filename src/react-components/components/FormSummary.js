@@ -1,13 +1,13 @@
 const React = require('react')
 
 const PRICES_BIKE_SIZE = {
-    'Pit Bike 50cc': 189.99,
-    'Mini Bike 65-85cc': 219.99,
-    'Big Bikes 125-400cc': 249.99
+    'Pit Bike 50cc': 149.00,
+    'Mini Bike 65-85cc': 199.00,
+    'Big Bikes 125-400cc': 249.00
 };
 
 const PRICES_COLORS = {
-     'Normal': 0,
+     'Standard': 0,
      'Holographic': 50,
 } ;
 
@@ -15,6 +15,17 @@ const PRICES_FINISHES = {
     'GLOSSY': 0,
     'MATTE': 0,
 };
+
+const HOLOGRAPHIC_PRICES = {
+    'Pit Bike 50cc': 30,
+     'Mini Bike 65-85cc': 45,
+     'Big Bikes 125-400cc': 60
+}
+
+function getPriceByColorAndSize(color, bikeSize) {
+    if (color != 'Holographic') return PRICES_COLORS[color];
+    return HOLOGRAPHIC_PRICES[bikeSize];
+}
 
 
 const camelCaseToSpaceSeparated = (text) => {
@@ -81,7 +92,7 @@ const FormSummary = ({ data, price}) => {
                             {step.keys.map(key => {
                                 const value = data[key];
                                 let price = "";
-
+                                console.log(`Key: ${key} Value: ${value}`);
                                 if (key === 'bikeSize') {
                                     price = "$" + PRICES_BIKE_SIZE[value] || "";
                                 } else if (key === 'finishes') {
@@ -108,7 +119,7 @@ const FormSummary = ({ data, price}) => {
                                             </td>
                                             <td>
                                                 {Object.entries(value).map(([colorKey, colorValue], index) =>
-                                                    colorValue.selected ? <div key={index} className="dashed-list">${PRICES_COLORS[colorKey]}</div> : null
+                                                    colorValue.selected ? <div key={index} className="dashed-list">${getPriceByColorAndSize(colorKey, data.bikeSize)}</div> : null
                                                 )}
                                             </td>
                                         </tr>

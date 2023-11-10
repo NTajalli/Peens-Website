@@ -1,22 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './Step5.css';
 
 const MAX_SIZE_MB = 0.5;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
 const Step5 = ({ formData, setFormData }) => {
-    formData = {
-        ...formData,
-        logo: formData.logo || null,
-        logos: formData.logos || ""  // Setting default empty string value for logos
-    };
-
     const [uploadingFile, setUploadingFile] = useState(formData.logo);
-    const [logoText, setLogoText] = useState(formData.logos);
+    const [logoText, setLogoText] = useState(formData.logos || "");
     const fileInputRef = useRef();
     Step5.questions = [
         { id: 'logo', label: 'Logo', type: 'singleImage', required: true }
     ];
+
+    useEffect(() => {
+        setFormData(prevData => ({
+            ...prevData,
+            logo: prevData.logo || null,
+            logos: prevData.logos || ""
+        }));
+    }, [setFormData]);
 
     const handleLogoChange = async (event) => {
         const file = event.target.files[0];

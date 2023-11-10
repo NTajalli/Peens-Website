@@ -1,3 +1,10 @@
+.reference-image {
+    width: 100px; /* Or any size you prefer */
+    height: auto;
+    cursor: pointer;
+    /* Additional styling if needed */
+}
+
 .step4-container {
     color: #f5f5f5; /* Light gray text color */
     display: flex;

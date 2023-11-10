@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './Step4.css';
 
 const MAX_IMAGES = 5;
@@ -6,16 +6,26 @@ const MAX_SIZE_MB = 5;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
 const Step4 = ({ formData, setFormData }) => {
-    const [uploadingFiles, setUploadingFiles] = useState(formData.referenceImages || []);
-    const [designDescription, setDesignDescription] = useState(formData.designDescription || "");
     const fileInputRef = useRef();
+
+    // Initialize state only if formData.referenceImages is an array
+    const [uploadingFiles, setUploadingFiles] = useState(Array.isArray(formData.referenceImages) ? formData.referenceImages : []);
+    const [designDescription, setDesignDescription] = useState(formData.designDescription || "");
+
+    useEffect(() => {
+        // This will ensure formData is initialized only if not already set
+        if (!Array.isArray(formData.referenceImages)) {
+            setFormData(prevData => ({
+                ...prevData,
+                referenceImages: [],
+                designDescription: prevData.designDescription || ""
+            }));
+        }
+    }, [setFormData, formData.referenceImages, formData.designDescription]);
+
     Step4.questions = [
         { id: 'referenceImages', label: 'Reference Images', type: 'image', required: true }
     ];
-    formData = {
-        ...formData,
-        referenceImages: formData.referenceImages || []
-    };
     
     const handleDesignDescriptionChange = (event) => {
         const text = event.target.value;
@@ -107,6 +117,15 @@ const Step4 = ({ formData, setFormData }) => {
         }
     };
     
+    const referenceImageList = Array.isArray(formData.referenceImages) ? (
+        formData.referenceImages.map((file, index) => (
+            <li key={index} className="step4-file-item">
+                {file.name}
+                <button className="step4-file-delete" onClick={() => deleteFile(index, true)}>X</button>
+            </li>
+        ))
+    ) : []; 
+
 
     return (
         <>
@@ -125,12 +144,7 @@ const Step4 = ({ formData, setFormData }) => {
                     onChange={handleImageChange}
                 />
                 <ul className="step4-file-list">
-                    {formData.referenceImages.map((file, index) => (
-                        <li key={index} className="step4-file-item">
-                            {file.name}
-                            <button className="step4-file-delete" onClick={() => deleteFile(index, true)}>X</button>
-                        </li>
-                    ))}
+                    {referenceImageList} {/* Use the new variable here */}
                 </ul>
                 <label className="step4-logo-text-label">DESIGN</label>
                 <textarea

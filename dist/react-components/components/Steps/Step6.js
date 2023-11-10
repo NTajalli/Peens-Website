@@ -27,6 +27,13 @@ var Step6 = function Step6(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     afterMarketPlastics = _useState2[0],
     setAfterMarketPlastics = _useState2[1];
+  (0, _react.useEffect)(function () {
+    setFormData(function (prevData) {
+      return _objectSpread(_objectSpread({}, prevData), {}, {
+        afterMarketPlastics: prevData.afterMarketPlastics || ""
+      });
+    });
+  }, [setFormData]);
   var handleAfterMarketPlasticsChange = function handleAfterMarketPlasticsChange(event) {
     var text = event.target.value;
     setAfterMarketPlastics(text);

@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Step6.css';
 
 const Step6 = ({ formData, setFormData }) => {
     const [afterMarketPlastics, setAfterMarketPlastics] = useState(formData.afterMarketPlastics || "");
+
+    useEffect(() => {
+        setFormData(prevData => ({
+            ...prevData,
+            afterMarketPlastics: prevData.afterMarketPlastics || "",
+        }));
+    }, [setFormData]);
     
-
-
     const handleAfterMarketPlasticsChange = (event) => {
         const text = event.target.value;
         setAfterMarketPlastics(text);

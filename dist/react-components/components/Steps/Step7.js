@@ -21,45 +21,68 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; } // import the color prices
-// import the common calculateTotalPrice function
-
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Step7 = function Step7(_ref) {
   var formData = _ref.formData,
     setFormData = _ref.setFormData,
     price = _ref.price,
     setPrice = _ref.setPrice;
+  // Convert color names and prices into an array of options
   var options = Object.entries(_priceConstants.PRICES_COLORS).map(function (_ref2) {
-    var _ref3 = _slicedToArray(_ref2, 2),
-      name = _ref3[0],
-      price = _ref3[1];
+    var _ref3 = _slicedToArray(_ref2, 1),
+      name = _ref3[0];
     return {
       name: name,
-      price: price
+      price: (0, _priceConstants.getPriceByColorAndSize)(name, formData.bikeSize)
     };
   });
-  Step7.questions = [];
-  var initialColors = formData.colors || options.reduce(function (acc, option) {
-    acc[option.name] = {
-      selected: option.name === "Standard",
-      price: option.price
-    };
-    return acc;
-  }, {});
-  var _useState = (0, _react.useState)(initialColors),
+
+  // Function to initialize color selection
+  var initializeColors = function initializeColors() {
+    return options.reduce(function (acc, option) {
+      acc[option.name] = {
+        selected: option.name === "Standard",
+        price: option.price
+      };
+      return acc;
+    }, {});
+  };
+
+  // State to keep track of selected options
+  var _useState = (0, _react.useState)(initializeColors),
     _useState2 = _slicedToArray(_useState, 2),
     selectedOptions = _useState2[0],
     setSelectedOptions = _useState2[1];
+
+  // Effect to update formData when component mounts
   (0, _react.useEffect)(function () {
+    // Only set formData if colors is not already set
+    if (!formData.colors) {
+      setFormData(function (prevData) {
+        return _objectSpread(_objectSpread({}, prevData), {}, {
+          colors: initializeColors()
+        });
+      });
+    }
+  }, []); // Empty dependency array ensures this effect runs once on mount
+
+  (0, _react.useEffect)(function () {
+    // Update the price whenever selected options change
     setPrice((0, _calculateTotalPrice.calculateTotalPrice)(_objectSpread(_objectSpread({}, formData), {}, {
       colors: selectedOptions
     })));
-  }, [selectedOptions]);
-  var toggleOption = function toggleOption(name, optionPrice) {
+  }, [selectedOptions, formData, setPrice]);
+  var toggleOption = function toggleOption(name) {
+    // Determine price based on color and bike size
+    var optionPrice = (0, _priceConstants.getPriceByColorAndSize)(name, formData.bikeSize);
+
+    // Update selected options state
     var updatedOptions = _objectSpread(_objectSpread({}, selectedOptions), {}, _defineProperty({}, name, {
       selected: !selectedOptions[name].selected,
       price: optionPrice
     }));
+
+    // Update local state and formData with new selections
     setSelectedOptions(updatedOptions);
     setFormData(function (prevData) {
       return _objectSpread(_objectSpread({}, prevData), {}, {
@@ -67,6 +90,7 @@ var Step7 = function Step7(_ref) {
       });
     });
   };
+  Step7.questions = [];
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement("h1", {
     className: "step-title"
   }, "COLORS DETAILS"), /*#__PURE__*/_react["default"].createElement("div", {
@@ -80,11 +104,11 @@ var Step7 = function Step7(_ref) {
     }, option.name), /*#__PURE__*/_react["default"].createElement("button", {
       className: "color-toggle ".concat(selectedOptions[option.name].selected ? 'active' : ''),
       onClick: function onClick() {
-        return toggleOption(option.name, option.price);
+        return toggleOption(option.name);
       }
     }, selectedOptions[option.name].selected ? '✓' : '×'), /*#__PURE__*/_react["default"].createElement("div", {
       className: "color-price"
-    }, "US$ ", option.price));
+    }, "$", selectedOptions[option.name].price.toFixed(2), " ", option.name != 'Standard' ? " for ".concat(formData.bikeSize) : ''));
   })));
 };
 var _default = exports["default"] = Step7;

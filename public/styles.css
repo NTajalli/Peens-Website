@@ -233,7 +233,7 @@ footer a.logo-center {
     justify-content: center;
     text-align: center;
     height: 100%;
-    padding: 5%;
+    padding: 2% 5% 0% 5%;
 }
 
 .homepage-text-content h1 {
@@ -474,6 +474,46 @@ button, input, optgroup, select, textarea {
     font-weight: 500;
 }
 
+.custom-carousel {
+    width: 100%; /* Carousel takes up the full width of its parent */
+    overflow: hidden; /* Hide the overflowed images */
+    height: 100%;
+    flex: 2;
+    margin-right: 5%;
+}
+
+.carousel-slides {
+    display: flex; /* Line up the slides in a row */
+    transition: transform 0.5s ease; /* Smooth transition for sliding effect */
+    will-change: transform; /* Optimizes the transition */
+    max-height: 100%;
+}
+
+.slide {
+    min-width: 100%; /* Each slide is as wide as the carousel */
+    max-width: 100%; /* Ensure the slide doesn't exceed the container's width */
+    flex: 0 0 100%; /* Prevent flex items from growing or shrinking */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+    max-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide img {
+    width: 100%; /* Images take up the full width of the slide */
+    height: auto; /* Height is auto to maintain aspect ratio */
+    display: block; /* Display block to remove bottom space under the image */
+    object-fit: contain; /* Ensures the image fits within the slide without being cropped */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Example shadow, adjust as needed */
+    border: 3px solid #fff; /* White border, can be changed to match your design */
+    padding: 8px; /* Space around the image */
+    border-radius: 10px; /* Rounded corners */
+    box-sizing: border-box; /* Includes padding in the width and height of the element */
+    max-height: 100%;
+}
+
+
 @media (max-width: 768px) {
     .homepage-image {
         display: none; /* Hide the image container */
@@ -516,6 +556,13 @@ button, input, optgroup, select, textarea {
         font-size: 3rem !important;
         margin-bottom: 30px !important;
     }
+
+    .homepage-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .custom-carousel {
+        margin-left: 5%;
+    }
 }
-
-

@@ -36,6 +36,7 @@ const Step8 = ({ formData, setFormData, price, setPrice }) => {
                     onInputChange={handleInputChange}
                     initialValue={formData[q.id]}
                     validationState={validationState}
+                    setValidationState={setValidationState}
                 />
             ))}
         </>

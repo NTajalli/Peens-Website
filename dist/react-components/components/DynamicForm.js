@@ -298,7 +298,7 @@ var DynamicForm = function DynamicForm() {
     className: "spinner"
   }), /*#__PURE__*/_react["default"].createElement("div", {
     id: "price-display"
-  }, "Current Estimated Total Price: $", price), /*#__PURE__*/_react["default"].createElement(_reactTransitionGroup.CSSTransition, {
+  }, "Current Estimated Price: $", price), /*#__PURE__*/_react["default"].createElement(_reactTransitionGroup.CSSTransition, {
     "in": true,
     appear: true,
     timeout: 1500,

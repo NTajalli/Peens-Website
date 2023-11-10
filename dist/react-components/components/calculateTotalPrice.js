@@ -16,7 +16,7 @@ var calculateTotalPrice = exports.calculateTotalPrice = function calculateTotalP
   // Price from Step 7 (Colors)
   for (var color in formData.colors) {
     if (formData.colors[color].selected) {
-      total += formData.colors[color].price; // no need to call .replace since it's already a number
+      total += (0, _priceConstants.getPriceByColorAndSize)(color, formData.bikeSize); // no need to call .replace since it's already a number
     }
   }
 

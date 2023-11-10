@@ -8,18 +8,27 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var React = require('react');
 var PRICES_BIKE_SIZE = {
-  'Pit Bike 50cc': 189.99,
-  'Mini Bike 65-85cc': 219.99,
-  'Big Bikes 125-400cc': 249.99
+  'Pit Bike 50cc': 149.00,
+  'Mini Bike 65-85cc': 199.00,
+  'Big Bikes 125-400cc': 249.00
 };
 var PRICES_COLORS = {
-  'Normal': 0,
+  'Standard': 0,
   'Holographic': 50
 };
 var PRICES_FINISHES = {
   'GLOSSY': 0,
   'MATTE': 0
 };
+var HOLOGRAPHIC_PRICES = {
+  'Pit Bike 50cc': 30,
+  'Mini Bike 65-85cc': 45,
+  'Big Bikes 125-400cc': 60
+};
+function getPriceByColorAndSize(color, bikeSize) {
+  if (color != 'Holographic') return PRICES_COLORS[color];
+  return HOLOGRAPHIC_PRICES[bikeSize];
+}
 var camelCaseToSpaceSeparated = function camelCaseToSpaceSeparated(text) {
   return text.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) {
     return str.toUpperCase();
@@ -69,6 +78,7 @@ var FormSummary = function FormSummary(_ref) {
     }, step.title)), step.keys.map(function (key) {
       var value = data[key];
       var price = "";
+      console.log("Key: ".concat(key, " Value: ").concat(value));
       if (key === 'bikeSize') {
         price = "$" + PRICES_BIKE_SIZE[value] || "";
       } else if (key === 'finishes') {
@@ -97,7 +107,7 @@ var FormSummary = function FormSummary(_ref) {
           return colorValue.selected ? /*#__PURE__*/React.createElement("div", {
             key: index,
             className: "dashed-list"
-          }, "$", PRICES_COLORS[colorKey]) : null;
+          }, "$", getPriceByColorAndSize(colorKey, data.bikeSize)) : null;
         })));
       } else if (Array.isArray(value)) {
         return /*#__PURE__*/React.createElement("tr", {

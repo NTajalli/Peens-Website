@@ -1,4 +1,4 @@
-import { PRICES_BIKE_SIZE, PRICES_FINISHES, PRICES_COLORS } from './priceConstants';
+import { PRICES_BIKE_SIZE, PRICES_FINISHES, PRICES_COLORS, getPriceByColorAndSize } from './priceConstants';
 
 export const calculateTotalPrice = (formData) => {
     let total = 0;
@@ -11,7 +11,7 @@ export const calculateTotalPrice = (formData) => {
     // Price from Step 7 (Colors)
     for (let color in formData.colors) {
         if (formData.colors[color].selected) {
-            total += formData.colors[color].price;  // no need to call .replace since it's already a number
+            total += getPriceByColorAndSize(color, formData.bikeSize);  // no need to call .replace since it's already a number
         }
     }
 
