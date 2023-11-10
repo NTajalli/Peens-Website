@@ -1,12 +1,19 @@
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Image Gallery</h2>
+    <h2 class="text-center mb-4">Image & Video Gallery</h2>
     <div class="row masonry-grid">
-        <% images.forEach(image => { %>
-        <div class="col-md-4 masonry-item mb-4">
-            <div class="card">
-                <img src="<%= image.path %>" class="card-img-top" alt="<%= image.title %>">
+        <% media.forEach(item => { %>
+            <div class="col-md-4 masonry-item mb-4">
+                <div class="card">
+                    <% if(item.type === 'image') { %>
+                        <img src="<%= item.path %>" class="card-img-top" alt="<%= item.title %>">
+                    <% } else if(item.type === 'video') { %>
+                        <video controls class="card-img-top">
+                            <source src="<%= item.path %>" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    <% } %>
+                </div>
             </div>
-        </div>
         <% }) %>
     </div>
 </div>

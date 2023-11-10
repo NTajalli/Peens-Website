@@ -39,6 +39,9 @@ var Step7 = function Step7(_ref) {
 
   // Function to initialize color selection
   var initializeColors = function initializeColors() {
+    if (formData.colors) {
+      return formData.colors;
+    }
     return options.reduce(function (acc, option) {
       acc[option.name] = {
         selected: option.name === "Standard",

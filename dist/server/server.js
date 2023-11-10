@@ -130,103 +130,141 @@ app.get('/form', function (req, res) {
     body: 'form'
   });
 });
-var images = [{
-  path: 'images/image0.jpg',
+var media = [{
+  path: 'videos/Video.mp4',
+  title: 'Video 1',
+  description: 'Some description about the Video.',
+  type: 'video'
+}, {
+  path: 'videos/Video_1.mp4',
+  title: 'Video 2',
+  description: 'Another description.',
+  type: 'video'
+}, {
+  path: 'videos/Video_2.mp4',
+  title: 'Video 3',
+  description: 'Some description about the Video.',
+  type: 'video'
+}, {
+  path: 'images/image0.jpeg',
   title: 'Image 1',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
-  path: 'images/image1.jpg',
+  path: 'images/image1.jpeg',
   title: 'Image 2',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
-  path: 'images/image2.jpg',
+  path: 'images/image2.jpeg',
   title: 'Image 3',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
   path: 'images/gallery1.jpg',
   title: 'Image 1',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
   path: 'images/gallery2.jpg',
   title: 'Image 2',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
   path: 'images/gallery3.jpg',
   title: 'Image 3',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
-  path: 'images/image3.jpg',
+  path: 'images/image3.jpeg',
   title: 'Image 3',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
-  path: 'images/image4.jpg',
+  path: 'images/image4.jpeg',
   title: 'Image 4',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
-  path: 'images/image5.jpg',
+  path: 'images/image5.jpeg',
   title: 'Image 5',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
   path: 'images/gallery4.jpg',
   title: 'Image 4',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
   path: 'images/gallery5.jpg',
   title: 'Image 5',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
-  path: 'images/image6.jpg',
+  path: 'images/image6.jpeg',
   title: 'Image 3',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
-  path: 'images/image7.jpg',
+  path: 'images/image7.jpeg',
   title: 'Image 4',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
-  path: 'images/image8.jpg',
+  path: 'images/image8.jpeg',
   title: 'Image 5',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
   path: 'images/gallery6.jpg',
   title: 'Image 6',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
   path: 'images/gallery7.jpg',
   title: 'Image 7',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
   path: 'images/gallery8.jpg',
   title: 'Image 8',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
-  path: 'images/image9.jpg',
+  path: 'images/image9.jpeg',
   title: 'Image 3',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
-  path: 'images/image10.jpg',
+  path: 'images/image10.jpeg',
   title: 'Image 4',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
-  path: 'images/image11.jpg',
+  path: 'images/image11.jpeg',
   title: 'Image 5',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
   path: 'images/gallery9.jpg',
   title: 'Image 9',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }, {
   path: 'images/gallery10.jpg',
   title: 'Image 10',
-  description: 'Another description.'
+  description: 'Another description.',
+  type: 'image'
 }, {
   path: 'images/gallery11.jpg',
   title: 'Image 11',
-  description: 'Some description about the image.'
+  description: 'Some description about the image.',
+  type: 'image'
 }];
 app.get('/gallery', function (req, res) {
   res.render('layout', {
     body: 'gallery',
-    images: images
+    media: media
   });
 });
 app.get('/contact', function (req, res) {

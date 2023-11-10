@@ -92,7 +92,6 @@ const FormSummary = ({ data, price}) => {
                             {step.keys.map(key => {
                                 const value = data[key];
                                 let price = "";
-                                console.log(`Key: ${key} Value: ${value}`);
                                 if (key === 'bikeSize') {
                                     price = "$" + PRICES_BIKE_SIZE[value] || "";
                                 } else if (key === 'finishes') {

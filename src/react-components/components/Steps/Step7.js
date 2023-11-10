@@ -12,6 +12,9 @@ const Step7 = ({ formData, setFormData, price, setPrice }) => {
 
     // Function to initialize color selection
     const initializeColors = () => {
+        if (formData.colors) {
+            return formData.colors;
+        }
         return options.reduce((acc, option) => {
             acc[option.name] = { selected: option.name === "Standard", price: option.price };
             return acc;
