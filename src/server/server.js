@@ -204,11 +204,25 @@ app.post('/contact', (req, res) => {
     const mailOptions = {
         from: process.env.FROM_EMAIL,
         to: process.env.TO_EMAIL,
-        subject: `Message from ${name}`,
-        text: message,
-        html: `<h1>Hi Pedro</h1><p>${name} is trying to get in contact with you regarding MP Decals USA! Here is their message: </p><p>${message}</p>
-        <p>Their email is ${email}</p>. `
+        subject: `New Contact Message from ${name}`,
+        html: `
+            <h1 style="color: #004aad;">Contact Form Submission</h1>
+            <p style="font-size: 16px;"><strong>${name}</strong> has sent a message through the contact form on the MpDecals USA website.</p>
+            <h2 style="color: #004aad;">Message Details:</h2>
+            <div style="background-color: #f2f2f2; padding: 15px; border-left: 4px solid #e84c3d; margin-bottom: 20px;">
+                <p style="font-size: 16px;"><strong>Message:</strong></p>
+                <p style="font-size: 16px; white-space: pre-line;">${message}</p>
+            </div>
+            <p style="font-size: 16px;"><strong>Contact Email:</strong> <a href="mailto:${email}" style="color: #e84c3d;">${email}</a></p>
+            <h2 style="color: #004aad;">Next Steps:</h2>
+            <ol style="font-size: 16px;">
+                <li>Review the message and assess the nature of the inquiry.</li>
+                <li>Respond to <strong>${name}</strong> at <a href="mailto:${email}" style="color: #e84c3d;">${email}</a> to provide the necessary information or assistance.</li>
+            </ol>
+            <p style="font-size: 16px;">Please ensure a prompt and courteous response to maintain our high standards of customer service.</p>
+            `
     };
+    
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -252,17 +266,62 @@ app.post('/send-email', async (req, res) => {
         const msg = {
             from: process.env.FROM_EMAIL,
             to: process.env.TO_EMAIL,
-            subject: 'New form submission',
-            html: `<h1>Hi Pedro</h1> <p>You have a new decal request submission!</p> <p>Here is the Link: <a href="${htmlS3Url}">${htmlS3Url}</a></p>`,
+            subject: 'New Custom Graphics Design Request Received',
+            html: `
+                <h1 style="color: #004aad;">New Design Request Notification</h1>
+                <p style="font-size: 16px;">Hello Team,</p>
+                <p style="font-size: 16px;">We have received a new custom graphics design request via our website. Please review the details at your earliest convenience to initiate the design process.</p>
+                <h2 style="color: #004aad;">Request Details:</h2>
+                <p style="font-size: 16px;">To view the complete submission details, please click on the link below. This will take you to the form submission stored in our AWS S3 bucket.</p>
+                <p style="font-size: 16px;"><strong>Submission Link:</strong> <a href="${htmlS3Url}" style="color: #e84c3d;">View Submission</a></p>
+                <h2 style="color: #004aad;">Next Steps:</h2>
+                <ol style="font-size: 16px;">
+                    <li>Review the submission details.</li>
+                    <li>Contact the customer for any additional information or clarification if needed.</li>
+                    <li>Prepare a preliminary design mockup based on the request.</li>
+                </ol>
+                `,
             attachments: []  // You can still add attachments if needed
         };
+        
 
         transporter.sendMail(msg, (error, info) => {
             if (error) {
-                console.error("Error sending email:", error);
+                console.error("Error sending form email:", error);
                 res.status(500).send("Error sending email.");
             } else {
-                console.log("Email sent:", info.response);
+                console.log("Form email sent:", info.response);
+                res.status(200).send("Email sent successfully.");
+            }
+        });
+
+        const msg2 = {
+            from: process.env.FROM_EMAIL,
+            to: formData.email,
+            subject: "We've Received Your Design Request - MpDecals USA",
+            html: `
+                <p>Dear ${formData.name},</p>
+                <p>Thank you for reaching out to MpDecals USA with your custom bike graphics design request! We're excited to inform you that we've successfully received your submission and are eager to dive into the details.</p>
+                <p><strong>What Happens Next?</strong><br>
+                1. <strong>Review Process</strong>: Our team will carefully review the details you've shared to fully understand your vision.<br>
+                2. <strong>Personalized Follow-Up</strong>: Within the next few days, we will reach out to you via email. We'll discuss your design in more detail, offer suggestions, and gather any additional information we might need.<br>
+                3. <strong>Preliminary Quote & Timeline</strong>: After our initial discussion, we will provide you with a preliminary quote and an estimated timeline for your custom graphics.</p>
+                <p>Need to Add More Details? If you wish to add more information to your design request or have any immediate questions, feel free to reach out to us at <a href='mailto:info@mpdecalsusa.com'>info@mpdecalsusa.com</a>. We’re here to make sure your bike graphics turn out exactly as you envision.</p>
+                <p>We appreciate your interest in MpDecals USA and are looking forward to creating something truly unique for your bike. Stay tuned for our follow-up email, and thank you once again for considering us for your custom graphics needs.</p>
+                <p>Warm regards,</p>
+                <p><strong>The MpDecals USA Team</strong></p>
+                <p><a href='https://mpdecalsusa.com'>mpdecalsusa.com</a></p>
+                `,
+            attachments: []  // You can still add attachments if needed
+        };
+        
+
+        transporter.sendMail(msg2, (error, info) => {
+            if (error) {
+                console.error("Error sending form email:", error);
+                res.status(500).send("Error sending email.");
+            } else {
+                console.log("Form email sent:", info.response);
                 res.status(200).send("Email sent successfully.");
             }
         });

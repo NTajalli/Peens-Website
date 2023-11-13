@@ -327,9 +327,8 @@ app.post('/contact', function (req, res) {
   var mailOptions = {
     from: process.env.FROM_EMAIL,
     to: process.env.TO_EMAIL,
-    subject: "Message from ".concat(name),
-    text: message,
-    html: "<h1>Hi Pedro</h1><p>".concat(name, " is trying to get in contact with you regarding MP Decals USA! Here is their message: </p><p>").concat(message, "</p>\n        <p>Their email is ").concat(email, "</p>. ")
+    subject: "New Contact Message from ".concat(name),
+    html: "\n            <h1 style=\"color: #004aad;\">Contact Form Submission</h1>\n            <p style=\"font-size: 16px;\"><strong>".concat(name, "</strong> has sent a message through the contact form on the MpDecals USA website.</p>\n            <h2 style=\"color: #004aad;\">Message Details:</h2>\n            <div style=\"background-color: #f2f2f2; padding: 15px; border-left: 4px solid #e84c3d; margin-bottom: 20px;\">\n                <p style=\"font-size: 16px;\"><strong>Message:</strong></p>\n                <p style=\"font-size: 16px; white-space: pre-line;\">").concat(message, "</p>\n            </div>\n            <p style=\"font-size: 16px;\"><strong>Contact Email:</strong> <a href=\"mailto:").concat(email, "\" style=\"color: #e84c3d;\">").concat(email, "</a></p>\n            <h2 style=\"color: #004aad;\">Next Steps:</h2>\n            <ol style=\"font-size: 16px;\">\n                <li>Review the message and assess the nature of the inquiry.</li>\n                <li>Respond to <strong>").concat(name, "</strong> at <a href=\"mailto:").concat(email, "\" style=\"color: #e84c3d;\">").concat(email, "</a> to provide the necessary information or assistance.</li>\n            </ol>\n            <p style=\"font-size: 16px;\">Please ensure a prompt and courteous response to maintain our high standards of customer service.</p>\n            <p style=\"font-size: 16px;\">Best Regards,</p>\n            <p style=\"font-size: 16px;\"><strong>MpDecals USA Team</strong></p>\n            ")
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
@@ -344,7 +343,7 @@ app.post('/contact', function (req, res) {
 var recentFiles = [];
 app.post('/send-email', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var formData, _iterator, _step, _file, _buffer, _fileKey, _s3Url, file, buffer, fileKey, s3Url, htmlContent, htmlKey, htmlS3Url, msg;
+    var formData, _iterator, _step, _file, _buffer, _fileKey, _s3Url, file, buffer, fileKey, s3Url, htmlContent, htmlKey, htmlS3Url, msg, msg2;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -401,32 +400,49 @@ app.post('/send-email', /*#__PURE__*/function () {
           msg = {
             from: process.env.FROM_EMAIL,
             to: process.env.TO_EMAIL,
-            subject: 'New form submission',
-            html: "<h1>Hi Pedro</h1> <p>You have a new decal request submission!</p> <p>Here is the Link: <a href=\"".concat(htmlS3Url, "\">").concat(htmlS3Url, "</a></p>"),
+            subject: 'New Custom Graphics Design Request Received',
+            html: "\n                <h1 style=\"color: #004aad;\">New Design Request Notification</h1>\n                <p style=\"font-size: 16px;\">Hello Team,</p>\n                <p style=\"font-size: 16px;\">We have received a new custom graphics design request via our website. Please review the details at your earliest convenience to initiate the design process.</p>\n                <h2 style=\"color: #004aad;\">Request Details:</h2>\n                <p style=\"font-size: 16px;\">To view the complete submission details, please click on the link below. This will take you to the form submission stored in our AWS S3 bucket.</p>\n                <p style=\"font-size: 16px;\"><strong>Submission Link:</strong> <a href=\"".concat(htmlS3Url, "\" style=\"color: #e84c3d;\">View Submission</a></p>\n                <h2 style=\"color: #004aad;\">Next Steps:</h2>\n                <ol style=\"font-size: 16px;\">\n                    <li>Review the submission details.</li>\n                    <li>Contact the customer for any additional information or clarification if needed.</li>\n                    <li>Prepare a preliminary design mockup based on the request.</li>\n                </ol>\n                "),
             attachments: [] // You can still add attachments if needed
           };
 
           transporter.sendMail(msg, function (error, info) {
             if (error) {
-              console.error("Error sending email:", error);
+              console.error("Error sending form email:", error);
               res.status(500).send("Error sending email.");
             } else {
-              console.log("Email sent:", info.response);
+              console.log("Form email sent:", info.response);
               res.status(200).send("Email sent successfully.");
             }
           });
-          _context.next = 43;
+          msg2 = {
+            from: process.env.FROM_EMAIL,
+            to: formData.email,
+            subject: "We've Received Your Design Request - MpDecals USA",
+            html: "\n                <p>Dear ".concat(formData.name, ",</p>\n                <p>Thank you for reaching out to MpDecals USA with your custom bike graphics design request! We're excited to inform you that we've successfully received your submission and are eager to dive into the details.</p>\n                <p><strong>What Happens Next?</strong><br>\n                1. <strong>Review Process</strong>: Our team will carefully review the details you've shared to fully understand your vision.<br>\n                2. <strong>Personalized Follow-Up</strong>: Within the next few days, we will reach out to you via email. We'll discuss your design in more detail, offer suggestions, and gather any additional information we might need.<br>\n                3. <strong>Preliminary Quote & Timeline</strong>: After our initial discussion, we will provide you with a preliminary quote and an estimated timeline for your custom graphics.</p>\n                <p>Need to Add More Details? If you wish to add more information to your design request or have any immediate questions, feel free to reach out to us at <a href='mailto:info@mpdecalsusa.com'>info@mpdecalsusa.com</a>. We\u2019re here to make sure your bike graphics turn out exactly as you envision.</p>\n                <p>We appreciate your interest in MpDecals USA and are looking forward to creating something truly unique for your bike. Stay tuned for our follow-up email, and thank you once again for considering us for your custom graphics needs.</p>\n                <p>Warm regards,</p>\n                <p><strong>The MpDecals USA Team</strong></p>\n                <p><a href='https://mpdecalsusa.com'>mpdecalsusa.com</a></p>\n                "),
+            attachments: [] // You can still add attachments if needed
+          };
+
+          transporter.sendMail(msg2, function (error, info) {
+            if (error) {
+              console.error("Error sending form email:", error);
+              res.status(500).send("Error sending email.");
+            } else {
+              console.log("Form email sent:", info.response);
+              res.status(200).send("Email sent successfully.");
+            }
+          });
+          _context.next = 45;
           break;
-        case 39:
-          _context.prev = 39;
+        case 41:
+          _context.prev = 41;
           _context.t1 = _context["catch"](0);
           console.error("Error in processing form submission:", _context.t1);
           res.status(500).send("Error processing form submission.");
-        case 43:
+        case 45:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 39], [3, 17, 20, 23]]);
+    }, _callee, null, [[0, 41], [3, 17, 20, 23]]);
   }));
   return function (_x4, _x5) {
     return _ref.apply(this, arguments);
