@@ -575,7 +575,7 @@ button, input, optgroup, select, textarea {
 }
 
 
-@media (max-width: 1200px) and (min-width: 800px) and (max-height: 1400px) and (min-height: 1100px) {
+@media (max-width: 1200px) and (min-width: 800px) and (max-height: 1400px) and (min-height: 1000px) {
     .homepage-container {
         flex-direction: column;
     }
