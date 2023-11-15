@@ -325,10 +325,52 @@ app.post('/send-email', async (req, res) => {
                 res.status(200).send("Email sent successfully.");
             }
         });
+
+        const devMsg = {
+            from: process.env.FROM_EMAIL,
+            to: process.env.DEV_EMAIL,  // Your developer email address
+            subject: 'Successful Form Submission - MpDecals USA',
+            html: `
+                <h1>Form Submission Successful</h1>
+                <p>A new custom graphics design request has been successfully submitted.</p>
+                <p><strong>Submission Link:</strong> <a href="${htmlS3Url}">${htmlS3Url}</a></p>
+                <p>Please review the submission details.</p>
+                `,
+            attachments: []  // Attachments if needed
+        };
+
+        transporter.sendMail(devMsg, (error, info) => {
+            if (error) {
+                console.error("Error sending notification to developer:", error);
+            } else {
+                console.log("Notification sent to developer:", info.response);
+            }
+        });
+
+        res.status(200).send("Emails sent successfully.");
     } catch (err) {
         console.error("Error in processing form submission:", err);
-        res.status(500).send("Error processing form submission.");
-    }
+        const errorDevMsg = {
+            from: process.env.FROM_EMAIL,
+            to: process.env.DEV_EMAIL,  // Your developer email address
+            subject: 'Form Submission Error - MpDecals USA',
+            html: `
+                <h1>Error in Form Submission</h1>
+                <p>An error occurred during a form submission process.</p>
+                <p>Error Details: ${err.message}</p>
+                `,
+            attachments: []  // Attachments if needed
+        };
+
+        transporter.sendMail(errorDevMsg, (error, info) => {
+            if (error) {
+                console.error("Error sending error notification to developer:", error);
+            } else {
+                console.log("Error notification sent to developer:", info.response);
+            }
+        });
+
+        res.status(500).send("Error processing form submission.");    }
 });
 
 app.get('*', (req, res) => {
