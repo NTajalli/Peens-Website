@@ -24,6 +24,8 @@ const DynamicForm = () => {
     const [price, setPrice] = useState(0);
     const [loading, setLoading] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [isNavigating, setIsNavigating] = useState(false);
+
 
     const onSubmit = async () => {
         setLoading(true);
@@ -97,6 +99,9 @@ const DynamicForm = () => {
     }, [step, formData]);
 
     const handleNext = () => {
+        if (isNavigating) return; // Prevent double clicks
+        setIsNavigating(true);
+
         const currentQuestions = getCurrentStepQuestions();
         const validationResults = validateInputs(currentQuestions, formData);
         
@@ -110,17 +115,22 @@ const DynamicForm = () => {
             body: JSON.stringify(formData)
         })
         .then(() => setStep(prevStep => prevStep + 1))
-        .catch(error => console.error('Error saving form data:', error));
+        .catch(error => console.error('Error saving form data:', error))
+        .finally(() => setIsNavigating(false));
     };
 
     const handlePrev = () => {
+        if (isNavigating) return; // Prevent double clicks
+        setIsNavigating(true);
+
         fetch('/save-form-data', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         })
         .then(() => setStep(prevStep => prevStep - 1))
-        .catch(error => console.error('Error saving form data:', error));
+        .catch(error => console.error('Error saving form data:', error))
+        .finally(() => setIsNavigating(false));
     };
 
     const renderStep = () => {
@@ -180,6 +190,7 @@ const DynamicForm = () => {
                         currentStep={step} 
                         totalSteps={9} 
                         stepValidations={stepValidations} 
+                        isNavigating={isNavigating}
                     />
                 </>
             )}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FormNavigation = ({ onNext, onPrev, onSubmit, currentStep, totalSteps, stepValidations }) => {
+const FormNavigation = ({ onNext, onPrev, onSubmit, currentStep, totalSteps, stepValidations, isNavigating }) => {
     const isFormValid = stepValidations[currentStep];
 
     return (
@@ -14,8 +14,10 @@ const FormNavigation = ({ onNext, onPrev, onSubmit, currentStep, totalSteps, ste
                         padding: '10px 20px',
                         borderRadius: '5px',
                         cursor: 'pointer',
+                        
                     }}
                     onClick={onPrev}
+                    disabled={isNavigating}
                 >
                     Previous Step
                 </button>
@@ -32,7 +34,7 @@ const FormNavigation = ({ onNext, onPrev, onSubmit, currentStep, totalSteps, ste
                             borderRadius: '5px',
                         }}
                         onClick={onSubmit}
-                        disabled={!isFormValid}
+                        disabled={!isFormValid || isNavigating}
                     >
                         Submit
                     </button>
@@ -48,7 +50,7 @@ const FormNavigation = ({ onNext, onPrev, onSubmit, currentStep, totalSteps, ste
                             borderRadius: '5px',
                         }}
                         onClick={onNext}
-                        disabled={!isFormValid}
+                        disabled={!isFormValid || isNavigating}
                     >
                         Next Step
                     </button>
