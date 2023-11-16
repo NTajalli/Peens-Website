@@ -12,7 +12,8 @@ var FormNavigation = function FormNavigation(_ref) {
     onSubmit = _ref.onSubmit,
     currentStep = _ref.currentStep,
     totalSteps = _ref.totalSteps,
-    stepValidations = _ref.stepValidations;
+    stepValidations = _ref.stepValidations,
+    isNavigating = _ref.isNavigating;
   var isFormValid = stepValidations[currentStep];
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "form-navigation"
@@ -25,7 +26,8 @@ var FormNavigation = function FormNavigation(_ref) {
       borderRadius: '5px',
       cursor: 'pointer'
     },
-    onClick: onPrev
+    onClick: onPrev,
+    disabled: isNavigating
   }, "Previous Step"), currentStep === totalSteps ? /*#__PURE__*/_react["default"].createElement("button", {
     style: {
       backgroundColor: isFormValid ? 'red' : 'gray',
@@ -36,7 +38,7 @@ var FormNavigation = function FormNavigation(_ref) {
       borderRadius: '5px'
     },
     onClick: onSubmit,
-    disabled: !isFormValid
+    disabled: !isFormValid || isNavigating
   }, "Submit") : /*#__PURE__*/_react["default"].createElement("button", {
     style: {
       backgroundColor: isFormValid ? 'red' : 'gray',
@@ -47,7 +49,7 @@ var FormNavigation = function FormNavigation(_ref) {
       borderRadius: '5px'
     },
     onClick: onNext,
-    disabled: !isFormValid
+    disabled: !isFormValid || isNavigating
   }, "Next Step"));
 };
 var _default = exports["default"] = FormNavigation;

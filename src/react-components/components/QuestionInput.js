@@ -9,7 +9,7 @@ export const validationRules = {
     year: {
       validate: (value) => {
         const currentYear = new Date().getFullYear();
-        return !isNaN(value) && value > 1900 && value <= currentYear;
+        return !isNaN(value) && value > 1900 && value <= currentYear + 1;
       },
       message: 'Invalid year',
     },
@@ -37,6 +37,14 @@ export const validationRules = {
         validate: (value) => /^[a-zA-Z\u0080-\u024F\s\/\-\)\(\`\.\"\']{2,56}$/.test(value),
         message: 'Country should only contain letters and be 2-56 characters long.',
       },
+      zipCode: {
+        validate: (value) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value),
+        message: 'Invalid zip code'
+      },
+      phoneNumber: {
+        validate: (value) => value === '' || /^\+?[0-9]{1,3}[ -]?[0-9]{6,14}$/.test(value),
+        message: 'Invalid Phone Number'
+      }
     // Add more validation rules here with custom messages as needed
   };
 
@@ -108,6 +116,16 @@ const QuestionInput = ({ question, onInputChange, initialValue, validationState,
           style={inputStyle}
         />
       );
+    } else if (question.type === 'tel') {
+      return (
+        <input
+            type="tel"
+            onChange={handleChange}
+            value={initialValue || ""}
+            placeholder="XXX-XXX-XXXX"  // Example format with 'X's
+            style={inputStyle}
+        />
+    );
     }
 
     // You can add more input types here if needed

@@ -23,7 +23,7 @@ var validateInputs = exports.validateInputs = function validateInputs(questions,
     } else if (rule && !rule.validate(value)) {
       validationErrors[q.id] = rule.message;
       allValid = false;
-    } else if (!value) {
+    } else if (!value && q.type != 'tel') {
       validationErrors[q.id] = "".concat(q.label, " is required");
       allValid = false;
     }

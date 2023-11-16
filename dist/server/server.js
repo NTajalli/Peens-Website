@@ -328,7 +328,7 @@ app.post('/contact', function (req, res) {
     from: process.env.FROM_EMAIL,
     to: process.env.TO_EMAIL,
     subject: "New Contact Message from ".concat(name),
-    html: "\n            <h1 style=\"color: #004aad;\">Contact Form Submission</h1>\n            <p style=\"font-size: 16px;\"><strong>".concat(name, "</strong> has sent a message through the contact form on the MpDecals USA website.</p>\n            <h2 style=\"color: #004aad;\">Message Details:</h2>\n            <div style=\"background-color: #f2f2f2; padding: 15px; border-left: 4px solid #e84c3d; margin-bottom: 20px;\">\n                <p style=\"font-size: 16px;\"><strong>Message:</strong></p>\n                <p style=\"font-size: 16px; white-space: pre-line;\">").concat(message, "</p>\n            </div>\n            <p style=\"font-size: 16px;\"><strong>Contact Email:</strong> <a href=\"mailto:").concat(email, "\" style=\"color: #e84c3d;\">").concat(email, "</a></p>\n            <h2 style=\"color: #004aad;\">Next Steps:</h2>\n            <ol style=\"font-size: 16px;\">\n                <li>Review the message and assess the nature of the inquiry.</li>\n                <li>Respond to <strong>").concat(name, "</strong> at <a href=\"mailto:").concat(email, "\" style=\"color: #e84c3d;\">").concat(email, "</a> to provide the necessary information or assistance.</li>\n            </ol>\n            <p style=\"font-size: 16px;\">Please ensure a prompt and courteous response to maintain our high standards of customer service.</p>\n            <p style=\"font-size: 16px;\">Best Regards,</p>\n            <p style=\"font-size: 16px;\"><strong>MpDecals USA Team</strong></p>\n            ")
+    html: "\n            <h1 style=\"color: #004aad;\">Contact Form Submission</h1>\n            <p style=\"font-size: 16px;\"><strong>".concat(name, "</strong> has sent a message through the contact form on the MpDecals USA website.</p>\n            <h2 style=\"color: #004aad;\">Message Details:</h2>\n            <div style=\"background-color: #f2f2f2; padding: 15px; border-left: 4px solid #e84c3d; margin-bottom: 20px;\">\n                <p style=\"font-size: 16px;\"><strong>Message:</strong></p>\n                <p style=\"font-size: 16px; white-space: pre-line;\">").concat(message, "</p>\n            </div>\n            <p style=\"font-size: 16px;\"><strong>Contact Email:</strong> <a href=\"mailto:").concat(email, "\" style=\"color: #e84c3d;\">").concat(email, "</a></p>\n            <h2 style=\"color: #004aad;\">Next Steps:</h2>\n            <ol style=\"font-size: 16px;\">\n                <li>Review the message and assess the nature of the inquiry.</li>\n                <li>Respond to <strong>").concat(name, "</strong> at <a href=\"mailto:").concat(email, "\" style=\"color: #e84c3d;\">").concat(email, "</a> to provide the necessary information or assistance.</li>\n            </ol>\n            <p style=\"font-size: 16px;\">Please ensure a prompt and courteous response to maintain our high standards of customer service.</p>\n            ")
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
@@ -343,7 +343,7 @@ app.post('/contact', function (req, res) {
 var recentFiles = [];
 app.post('/send-email', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var formData, _iterator, _step, _file, _buffer, _fileKey, _s3Url, file, buffer, fileKey, s3Url, htmlContent, htmlKey, htmlS3Url, msg, msg2;
+    var formData, _iterator, _step, _file, _buffer, _fileKey, _s3Url, file, buffer, fileKey, s3Url, htmlContent, htmlKey, htmlS3Url, msg, msg2, devMsg, errorDevMsg;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -431,18 +431,51 @@ app.post('/send-email', /*#__PURE__*/function () {
               res.status(200).send("Email sent successfully.");
             }
           });
-          _context.next = 45;
+          devMsg = {
+            from: process.env.FROM_EMAIL,
+            to: process.env.DEV_EMAIL,
+            // Your developer email address
+            subject: 'Successful Form Submission - MpDecals USA',
+            html: "\n                <h1>Form Submission Successful</h1>\n                <p>A new custom graphics design request has been successfully submitted.</p>\n                <p><strong>Submission Link:</strong> <a href=\"".concat(htmlS3Url, "\">").concat(htmlS3Url, "</a></p>\n                <p>Please review the submission details.</p>\n                "),
+            attachments: [] // Attachments if needed
+          };
+
+          transporter.sendMail(devMsg, function (error, info) {
+            if (error) {
+              console.error("Error sending notification to developer:", error);
+            } else {
+              console.log("Notification sent to developer:", info.response);
+            }
+          });
+          res.status(200).send("Emails sent successfully.");
+          _context.next = 50;
           break;
-        case 41:
-          _context.prev = 41;
+        case 44:
+          _context.prev = 44;
           _context.t1 = _context["catch"](0);
           console.error("Error in processing form submission:", _context.t1);
+          errorDevMsg = {
+            from: process.env.FROM_EMAIL,
+            to: process.env.DEV_EMAIL,
+            // Your developer email address
+            subject: 'Form Submission Error - MpDecals USA',
+            html: "\n                <h1>Error in Form Submission</h1>\n                <p>An error occurred during a form submission process.</p>\n                <p>Error Details: ".concat(_context.t1.message, "</p>\n                "),
+            attachments: [] // Attachments if needed
+          };
+
+          transporter.sendMail(errorDevMsg, function (error, info) {
+            if (error) {
+              console.error("Error sending error notification to developer:", error);
+            } else {
+              console.log("Error notification sent to developer:", info.response);
+            }
+          });
           res.status(500).send("Error processing form submission.");
-        case 45:
+        case 50:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 41], [3, 17, 20, 23]]);
+    }, _callee, null, [[0, 44], [3, 17, 20, 23]]);
   }));
   return function (_x4, _x5) {
     return _ref.apply(this, arguments);

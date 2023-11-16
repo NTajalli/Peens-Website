@@ -13,7 +13,7 @@ const Step2 = ({ formData, setFormData }) => {
 
     const validateYear = (year) => {
         const currentYear = new Date().getFullYear();
-        return !isNaN(year) && year > 1900 && year <= currentYear;
+        return !isNaN(year) && year > 1900 && year <= currentYear + 1;
       };  
 
     const handleInputChange = (id, value) => {

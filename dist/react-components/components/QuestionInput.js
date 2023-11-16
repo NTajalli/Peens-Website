@@ -23,7 +23,7 @@ var validationRules = exports.validationRules = {
   year: {
     validate: function validate(value) {
       var currentYear = new Date().getFullYear();
-      return !isNaN(value) && value > 1900 && value <= currentYear;
+      return !isNaN(value) && value > 1900 && value <= currentYear + 1;
     },
     message: 'Invalid year'
   },
@@ -62,6 +62,18 @@ var validationRules = exports.validationRules = {
       return /^[a-zA-Z\u0080-\u024F\s\/\-\)\(\`\.\"\']{2,56}$/.test(value);
     },
     message: 'Country should only contain letters and be 2-56 characters long.'
+  },
+  zipCode: {
+    validate: function validate(value) {
+      return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
+    },
+    message: 'Invalid zip code'
+  },
+  phoneNumber: {
+    validate: function validate(value) {
+      return value === '' || /^\+?[0-9]{1,3}[ -]?[0-9]{6,14}$/.test(value);
+    },
+    message: 'Invalid Phone Number'
   }
   // Add more validation rules here with custom messages as needed
 };
@@ -130,6 +142,15 @@ var QuestionInput = function QuestionInput(_ref) {
         type: "text",
         onChange: handleChange,
         value: initialValue || "",
+        style: inputStyle
+      });
+    } else if (question.type === 'tel') {
+      return /*#__PURE__*/_react["default"].createElement("input", {
+        type: "tel",
+        onChange: handleChange,
+        value: initialValue || "",
+        placeholder: "XXX-XXX-XXXX" // Example format with 'X's
+        ,
         style: inputStyle
       });
     }

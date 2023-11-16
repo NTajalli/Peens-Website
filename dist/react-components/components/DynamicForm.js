@@ -71,6 +71,10 @@ var DynamicForm = function DynamicForm() {
     _useState14 = _slicedToArray(_useState13, 2),
     submitSuccess = _useState14[0],
     setSubmitSuccess = _useState14[1];
+  var _useState15 = (0, _react.useState)(false),
+    _useState16 = _slicedToArray(_useState15, 2),
+    isNavigating = _useState16[0],
+    setIsNavigating = _useState16[1];
   var onSubmit = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var dataToSend, response;
@@ -156,6 +160,8 @@ var DynamicForm = function DynamicForm() {
     setStepValidations(updatedStepValidations);
   }, [step, formData]);
   var handleNext = function handleNext() {
+    if (isNavigating) return; // Prevent double clicks
+    setIsNavigating(true);
     var currentQuestions = getCurrentStepQuestions();
     var validationResults = (0, _formValidationHelper.validateInputs)(currentQuestions, formData);
     setValidationState(validationResults.errors);
@@ -172,9 +178,13 @@ var DynamicForm = function DynamicForm() {
       });
     })["catch"](function (error) {
       return console.error('Error saving form data:', error);
+    })["finally"](function () {
+      return setIsNavigating(false);
     });
   };
   var handlePrev = function handlePrev() {
+    if (isNavigating) return; // Prevent double clicks
+    setIsNavigating(true);
     fetch('/save-form-data', {
       method: 'POST',
       headers: {
@@ -187,6 +197,8 @@ var DynamicForm = function DynamicForm() {
       });
     })["catch"](function (error) {
       return console.error('Error saving form data:', error);
+    })["finally"](function () {
+      return setIsNavigating(false);
     });
   };
   var renderStep = function renderStep() {
@@ -315,7 +327,8 @@ var DynamicForm = function DynamicForm() {
     onSubmit: onSubmit,
     currentStep: step,
     totalSteps: 9,
-    stepValidations: stepValidations
+    stepValidations: stepValidations,
+    isNavigating: isNavigating
   })));
 };
 var _default = exports["default"] = DynamicForm;

@@ -1,11 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import QuestionInput, { validateField } from '../QuestionInput';
-
-const validateEmail = (email) => {
-    // Simple regex for email validation
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  };
 
 const Step9 = ({ formData, setFormData }) => {
     const [validationState, setValidationState] = useState({});
@@ -17,7 +11,13 @@ const Step9 = ({ formData, setFormData }) => {
         { type: 'text', label: 'CITY', id: 'city' },
         { type: 'text', label: 'STATE', id: 'state' },
         { type: 'text', label: 'COUNTRY', id: 'country' },
+        { type: 'text', label: 'ZIP CODE', id: 'zipCode'},
+        { type: 'tel', label: 'PHONE NUMBER (OPTIONAL)', id: 'phoneNumber'},
     ];
+    
+    useEffect(() => {
+        setFormData({ ...formData, phoneNumber: formData.phoneNumber || '' });
+    }, []);    
 
     const handleInputChange = (id, value) => {
         const updatedData = { ...formData, [id]: value };

@@ -68,7 +68,7 @@ const FormSummary = ({ data, price}) => {
         },
         {
             title: "CUSTOMER INFORMATION",
-            keys: ["name", "email", "address", "city", "state", "country"]
+            keys: ["name", "email", "address", "city", "state", "country", "zipCode", "phoneNumber"]
         }
     ];
 

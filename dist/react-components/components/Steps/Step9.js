@@ -20,11 +20,6 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-var validateEmail = function validateEmail(email) {
-  // Simple regex for email validation
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-};
 var Step9 = function Step9(_ref) {
   var formData = _ref.formData,
     setFormData = _ref.setFormData;
@@ -56,7 +51,20 @@ var Step9 = function Step9(_ref) {
     type: 'text',
     label: 'COUNTRY',
     id: 'country'
+  }, {
+    type: 'text',
+    label: 'ZIP CODE',
+    id: 'zipCode'
+  }, {
+    type: 'tel',
+    label: 'PHONE NUMBER (OPTIONAL)',
+    id: 'phoneNumber'
   }];
+  (0, _react.useEffect)(function () {
+    setFormData(_objectSpread(_objectSpread({}, formData), {}, {
+      phoneNumber: formData.phoneNumber || ''
+    }));
+  }, []);
   var handleInputChange = function handleInputChange(id, value) {
     var updatedData = _objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, id, value));
 

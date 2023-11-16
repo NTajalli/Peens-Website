@@ -49,7 +49,7 @@ var Step2 = function Step2(_ref) {
   }];
   var validateYear = function validateYear(year) {
     var currentYear = new Date().getFullYear();
-    return !isNaN(year) && year > 1900 && year <= currentYear;
+    return !isNaN(year) && year > 1900 && year <= currentYear + 1;
   };
   var handleInputChange = function handleInputChange(id, value) {
     var updatedData = _objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, id, value));

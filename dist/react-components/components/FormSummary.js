@@ -63,7 +63,7 @@ var FormSummary = function FormSummary(_ref) {
     keys: ["finishes"]
   }, {
     title: "CUSTOMER INFORMATION",
-    keys: ["name", "email", "address", "city", "state", "country"]
+    keys: ["name", "email", "address", "city", "state", "country", "zipCode", "phoneNumber"]
   }];
   return /*#__PURE__*/React.createElement("div", {
     className: "form-summary"

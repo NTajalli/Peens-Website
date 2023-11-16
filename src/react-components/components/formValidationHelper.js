@@ -21,7 +21,7 @@ export const validateInputs = (questions, formData) => {
         } else if (rule && !rule.validate(value)) {
             validationErrors[q.id] = rule.message;
             allValid = false;
-        } else if (!value) {
+        } else if (!value && q.type != 'tel') {
             validationErrors[q.id] = `${q.label} is required`;
             allValid = false;
         }
