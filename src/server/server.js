@@ -306,7 +306,7 @@ app.post('/send-email', async (req, res) => {
                 1. <strong>Review Process</strong>: Our team will carefully review the details you've shared to fully understand your vision.<br>
                 2. <strong>Personalized Follow-Up</strong>: Within the next few days, we will reach out to you via email. We'll discuss your design in more detail, offer suggestions, and gather any additional information we might need.<br>
                 3. <strong>Preliminary Quote & Timeline</strong>: After our initial discussion, we will provide you with a preliminary quote and an estimated timeline for your custom graphics.</p>
-                <p>Need to Add More Details? If you wish to add more information to your design request or have any immediate questions, feel free to reach out to us at <a href='mailto:info@mpdecalsusa.com'>info@mpdecalsusa.com</a>. We’re here to make sure your bike graphics turn out exactly as you envision.</p>
+                <p>Need to Add More Details? If you wish to add more information to your design request or have any immediate questions, feel free to reach out to us at <a href='mailto:mpdecalsusa@gmail.com'>mpdecalsusa@gmail.com</a>. We’re here to make sure your bike graphics turn out exactly as you envision.</p>
                 <p>We appreciate your interest in MpDecals USA and are looking forward to creating something truly unique for your bike. Stay tuned for our follow-up email, and thank you once again for considering us for your custom graphics needs.</p>
                 <p>Warm regards,</p>
                 <p><strong>The MpDecals USA Team</strong></p>
