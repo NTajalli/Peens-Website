@@ -82,7 +82,6 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../../views'));
 
 // Middleware for serving static files
-app.use('/static', express["static"](path.join(__dirname, '../../node_modules')));
 app.use(express["static"](path.join(__dirname, '../../public')));
 app.use('/css', express["static"](path.join(__dirname, '../../public/css')));
 app.use('/js', express["static"](path.join(__dirname, '../../public/js')));
@@ -339,9 +338,8 @@ app.post('/save-form-data', function (req, res) {
     });
   }
 });
-app.get('*.css', function (req, res) {
-  res.status(404).send('CSS file not found.');
-});
+
+// Removed catch-all CSS route to let static middleware handle CSS files
 
 // SendGrid Setup
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
