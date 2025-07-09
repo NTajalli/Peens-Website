@@ -79,6 +79,7 @@ function _uploadToS() {
   return _uploadToS.apply(this, arguments);
 }
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../../views'));
 
 // Middleware for serving static files
 app.use('/static', express["static"](path.join(__dirname, '../../node_modules')));
