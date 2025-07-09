@@ -84,6 +84,16 @@ app.set('views', path.join(__dirname, '../../views'));
 // Middleware for serving static files
 app.use('/static', express["static"](path.join(__dirname, '../../node_modules')));
 app.use(express["static"](path.join(__dirname, '../../public')));
+app.use('/css', express["static"](path.join(__dirname, '../../public/css')));
+app.use('/js', express["static"](path.join(__dirname, '../../public/js')));
+app.use('/images', express["static"](path.join(__dirname, '../../public/images')));
+app.use('/videos', express["static"](path.join(__dirname, '../../public/videos')));
+
+// Debug middleware
+app.use(function (req, res, next) {
+  console.log("Request: ".concat(req.method, " ").concat(req.url));
+  next();
+});
 
 // Middleware for parsing incoming payloads
 app.use(bodyParser.urlencoded({
@@ -273,6 +283,29 @@ app.get('/contact', function (req, res) {
     body: 'contact',
     query: req.query
   });
+});
+
+// Debug endpoint
+app.get('/debug/files', function (req, res) {
+  var fs = require('fs');
+  var publicPath = path.join(__dirname, '../../public');
+  var cssPath = path.join(__dirname, '../../public/css');
+  try {
+    var publicFiles = fs.existsSync(publicPath) ? fs.readdirSync(publicPath) : 'public dir not found';
+    var cssFiles = fs.existsSync(cssPath) ? fs.readdirSync(cssPath) : 'css dir not found';
+    res.json({
+      serverPath: __dirname,
+      publicPath: publicPath,
+      cssPath: cssPath,
+      publicFiles: publicFiles,
+      cssFiles: cssFiles,
+      cwd: process.cwd()
+    });
+  } catch (error) {
+    res.json({
+      error: error.message
+    });
+  }
 });
 app.get('/get-form-data', function (req, res) {
   try {
