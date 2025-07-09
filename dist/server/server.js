@@ -418,7 +418,7 @@ app.post('/send-email', /*#__PURE__*/function () {
             from: process.env.FROM_EMAIL,
             to: formData.email,
             subject: "We've Received Your Design Request - MpDecals USA",
-            html: "\n                <p>Dear ".concat(formData.name, ",</p>\n                <p>Thank you for reaching out to MpDecals USA with your custom bike graphics design request! We're excited to inform you that we've successfully received your submission and are eager to dive into the details.</p>\n                <p><strong>What Happens Next?</strong><br>\n                1. <strong>Review Process</strong>: Our team will carefully review the details you've shared to fully understand your vision.<br>\n                2. <strong>Personalized Follow-Up</strong>: Within the next few days, we will reach out to you via email. We'll discuss your design in more detail, offer suggestions, and gather any additional information we might need.<br>\n                3. <strong>Preliminary Quote & Timeline</strong>: After our initial discussion, we will provide you with a preliminary quote and an estimated timeline for your custom graphics.</p>\n                <p>Need to Add More Details? If you wish to add more information to your design request or have any immediate questions, feel free to reach out to us at <a href='mailto:info@mpdecalsusa.com'>info@mpdecalsusa.com</a>. We\u2019re here to make sure your bike graphics turn out exactly as you envision.</p>\n                <p>We appreciate your interest in MpDecals USA and are looking forward to creating something truly unique for your bike. Stay tuned for our follow-up email, and thank you once again for considering us for your custom graphics needs.</p>\n                <p>Warm regards,</p>\n                <p><strong>The MpDecals USA Team</strong></p>\n                <p><a href='https://mpdecalsusa.com'>mpdecalsusa.com</a></p>\n                "),
+            html: "\n                <p>Dear ".concat(formData.name, ",</p>\n                <p>Thank you for reaching out to MpDecals USA with your custom bike graphics design request! We're excited to inform you that we've successfully received your submission and are eager to dive into the details.</p>\n                <p><strong>What Happens Next?</strong><br>\n                1. <strong>Review Process</strong>: Our team will carefully review the details you've shared to fully understand your vision.<br>\n                2. <strong>Personalized Follow-Up</strong>: Within the next few days, we will reach out to you via email. We'll discuss your design in more detail, offer suggestions, and gather any additional information we might need.<br>\n                3. <strong>Preliminary Quote & Timeline</strong>: After our initial discussion, we will provide you with a preliminary quote and an estimated timeline for your custom graphics.</p>\n                <p>Need to Add More Details? If you wish to add more information to your design request or have any immediate questions, feel free to reach out to us at <a href='mailto:mpdecalsusa@gmail.com'>mpdecalsusa@gmail.com</a>. We\u2019re here to make sure your bike graphics turn out exactly as you envision.</p>\n                <p>We appreciate your interest in MpDecals USA and are looking forward to creating something truly unique for your bike. Stay tuned for our follow-up email, and thank you once again for considering us for your custom graphics needs.</p>\n                <p>Warm regards,</p>\n                <p><strong>The MpDecals USA Team</strong></p>\n                <p><a href='https://mpdecalsusa.com'>mpdecalsusa.com</a></p>\n                "),
             attachments: [] // You can still add attachments if needed
           };
 
@@ -481,10 +481,6 @@ app.post('/send-email', /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }());
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'public', 'index.html')); // if you have an index.html in the public directory
-});
-// Start the server
-app.listen(PORT, function () {
-  console.log("Server is running on http://localhost:".concat(PORT));
-});
+
+// Export the app for Vercel
+module.exports = app;
