@@ -128,11 +128,23 @@ const FormSummary = ({ data, price}) => {
                                         <tr key={key}>
                                             <td>{formattedKey}</td>
                                             <td>
-                                                {value.map((img, index) => <div key={index} className="dashed-list">{img.name}</div>)}
+                                                <div className="image-gallery">
+                                                    {value.map((img, index) => (
+                                                        <div key={index} className="image-item">
+                                                            <div className="image-name">{img.name}</div>
+                                                            {img.s3Url && (
+                                                                <div className="image-container">
+                                                                    <img src={img.s3Url} alt={img.name} className="uploaded-image" />
+                                                                    <a href={img.s3Url} target="_blank" rel="noopener noreferrer" className="image-link">
+                                                                        View Full Size
+                                                                    </a>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </td>
-                                            <td>
-
-                                            </td>
+                                            <td></td>
                                         </tr>
                                     );
                                 } else if (!value) {
@@ -143,11 +155,23 @@ const FormSummary = ({ data, price}) => {
                                             <td></td>
                                         </tr>
                                     );
-                                } else if (value.dataURL) {
+                                } else if (value.dataURL || value.s3Url) {
                                     return (
                                         <tr key={key}>
                                             <td>{formattedKey}</td>
-                                            <td>{value.name}</td>
+                                            <td>
+                                                <div className="image-item">
+                                                    <div className="image-name">{value.name}</div>
+                                                    {value.s3Url && (
+                                                        <div className="image-container">
+                                                            <img src={value.s3Url} alt={value.name} className="uploaded-image" />
+                                                            <a href={value.s3Url} target="_blank" rel="noopener noreferrer" className="image-link">
+                                                                View Full Size
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
                                             <td></td>
                                         </tr>
                                     );

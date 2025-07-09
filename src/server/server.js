@@ -1,3 +1,4 @@
+require('dotenv').config();
 require('ignore-styles');
 const renderFormSummary = require('./renderFormSummary');
 const express = require('express');
@@ -7,8 +8,9 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const nodemailer = require('nodemailer');
-const sgMail = require('@sendgrid/mail');
+
+const FormData = require('form-data');
+const Mailgun = require('mailgun.js');
 const MemoryStore = require('session-memory-store')(session);
 const AWS = require('aws-sdk');
 const archiver = require('archiver');
@@ -56,15 +58,16 @@ function generateHTML(formData) {
 
 async function uploadToS3(content, fileName, contentType) {
     const params = {
-        Bucket: 'mpdecalsformstorage', 
+        Bucket: process.env.S3_BUCKET_NAME || 'mpdecalsusaformstorage', 
         Key: fileName,
         Body: content,
-        ContentType: contentType,
-        ACL: 'public-read'
+        ContentType: contentType
+        // Removed ACL - using bucket policy instead
     };
 
     await s3.putObject(params).promise();
-    return `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`;
+    const region = process.env.S3_REGION || 'us-east-1';
+    return `https://${params.Bucket}.s3.${region}.amazonaws.com/${params.Key}`;
 }
 
 
@@ -218,52 +221,47 @@ app.post('/save-form-data', (req, res) => {
 
 
 
-// SendGrid Setup
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-const transporter = nodemailer.createTransport({
-    service: 'SendGrid',
-    auth: {
-        user: 'apikey', // 'apikey' is a magic word, don't change it
-        pass: process.env.SENDGRID_API_KEY
-    }
+// Mailgun Setup
+const mailgun = new Mailgun(FormData);
+const mg = mailgun.client({
+    username: 'api',
+    key: process.env.MAILGUN_API_KEY || process.env.API_KEY
+    // When you have an EU-domain, you must specify the endpoint:
+    // url: "https://api.eu.mailgun.net"
 });
 
-app.post('/contact', (req, res) => {
+app.post('/contact', async (req, res) => {
     const { name, email, message } = req.body;
 
-    const mailOptions = {
-        from: process.env.FROM_EMAIL,
-        to: process.env.TO_EMAIL,
-        subject: `New Contact Message from ${name}`,
-        html: `
-            <h1 style="color: #004aad;">Contact Form Submission</h1>
-            <p style="font-size: 16px;"><strong>${name}</strong> has sent a message through the contact form on the MpDecals USA website.</p>
-            <h2 style="color: #004aad;">Message Details:</h2>
-            <div style="background-color: #f2f2f2; padding: 15px; border-left: 4px solid #e84c3d; margin-bottom: 20px;">
-                <p style="font-size: 16px;"><strong>Message:</strong></p>
-                <p style="font-size: 16px; white-space: pre-line;">${message}</p>
-            </div>
-            <p style="font-size: 16px;"><strong>Contact Email:</strong> <a href="mailto:${email}" style="color: #e84c3d;">${email}</a></p>
-            <h2 style="color: #004aad;">Next Steps:</h2>
-            <ol style="font-size: 16px;">
-                <li>Review the message and assess the nature of the inquiry.</li>
-                <li>Respond to <strong>${name}</strong> at <a href="mailto:${email}" style="color: #e84c3d;">${email}</a> to provide the necessary information or assistance.</li>
-            </ol>
-            <p style="font-size: 16px;">Please ensure a prompt and courteous response to maintain our high standards of customer service.</p>
-            `
-    };
-    
+    try {
+        const data = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+            from: process.env.FROM_EMAIL,
+            to: [process.env.TO_EMAIL],
+            subject: `New Contact Message from ${name}`,
+            html: `
+                <h1 style="color: #004aad;">Contact Form Submission</h1>
+                <p style="font-size: 16px;"><strong>${name}</strong> has sent a message through the contact form on the MpDecals USA website.</p>
+                <h2 style="color: #004aad;">Message Details:</h2>
+                <div style="background-color: #f2f2f2; padding: 15px; border-left: 4px solid #e84c3d; margin-bottom: 20px;">
+                    <p style="font-size: 16px;"><strong>Message:</strong></p>
+                    <p style="font-size: 16px; white-space: pre-line;">${message}</p>
+                </div>
+                <p style="font-size: 16px;"><strong>Contact Email:</strong> <a href="mailto:${email}" style="color: #e84c3d;">${email}</a></p>
+                <h2 style="color: #004aad;">Next Steps:</h2>
+                <ol style="font-size: 16px;">
+                    <li>Review the message and assess the nature of the inquiry.</li>
+                    <li>Respond to <strong>${name}</strong> at <a href="mailto:${email}" style="color: #e84c3d;">${email}</a> to provide the necessary information or assistance.</li>
+                </ol>
+                <p style="font-size: 16px;">Please ensure a prompt and courteous response to maintain our high standards of customer service.</p>
+                `
+        });
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-            res.redirect('/contact?success=false');
-        } else {
-            console.log('Email sent: ' + info.response);
-            res.redirect('/contact?success=true');
-        }
-    });
+        console.log('Email sent successfully:', data);
+        res.redirect('/contact?success=true');
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.redirect('/contact?success=false');
+    }
 });
 
 let recentFiles = [];
@@ -294,9 +292,9 @@ app.post('/send-email', async (req, res) => {
         const htmlS3Url = await uploadToS3(htmlContent, htmlKey, 'text/html');
 
         // 4. Send an email with the S3 link to the HTML content
-        const msg = {
+        await mg.messages.create(process.env.MAILGUN_DOMAIN, {
             from: process.env.FROM_EMAIL,
-            to: process.env.TO_EMAIL,
+            to: [process.env.TO_EMAIL],
             subject: 'New Custom Graphics Design Request Received',
             html: `
                 <h1 style="color: #004aad;">New Design Request Notification</h1>
@@ -311,24 +309,14 @@ app.post('/send-email', async (req, res) => {
                     <li>Contact the customer for any additional information or clarification if needed.</li>
                     <li>Prepare a preliminary design mockup based on the request.</li>
                 </ol>
-                `,
-            attachments: []  // You can still add attachments if needed
-        };
-        
-
-        transporter.sendMail(msg, (error, info) => {
-            if (error) {
-                console.error("Error sending form email:", error);
-                res.status(500).send("Error sending email.");
-            } else {
-                console.log("Form email sent:", info.response);
-                res.status(200).send("Email sent successfully.");
-            }
+                `
         });
+
+        console.log("Form email sent successfully");
 
         const msg2 = {
             from: process.env.FROM_EMAIL,
-            to: formData.email,
+            to: [formData.email],
             subject: "We've Received Your Design Request - MpDecals USA",
             html: `
                 <p>Dear ${formData.name},</p>
@@ -342,64 +330,31 @@ app.post('/send-email', async (req, res) => {
                 <p>Warm regards,</p>
                 <p><strong>The MpDecals USA Team</strong></p>
                 <p><a href='https://mpdecalsusa.com'>mpdecalsusa.com</a></p>
-                `,
-            attachments: []  // You can still add attachments if needed
+                `
         };
         
 
-        transporter.sendMail(msg2, (error, info) => {
-            if (error) {
-                console.error("Error sending form email:", error);
-                res.status(500).send("Error sending email.");
-            } else {
-                console.log("Form email sent:", info.response);
-                res.status(200).send("Email sent successfully.");
-            }
-        });
-
-        const devMsg = {
-            from: process.env.FROM_EMAIL,
-            to: process.env.DEV_EMAIL,  // Your developer email address
-            subject: 'Successful Form Submission - MpDecals USA',
-            html: `
-                <h1>Form Submission Successful</h1>
-                <p>A new custom graphics design request has been successfully submitted.</p>
-                <p><strong>Submission Link:</strong> <a href="${htmlS3Url}">${htmlS3Url}</a></p>
-                <p>Please review the submission details.</p>
-                `,
-            attachments: []  // Attachments if needed
-        };
-
-        transporter.sendMail(devMsg, (error, info) => {
-            if (error) {
-                console.error("Error sending notification to developer:", error);
-            } else {
-                console.log("Notification sent to developer:", info.response);
-            }
-        });
+        // await mg.messages.create(process.env.MAILGUN_DOMAIN, msg2);
+        console.log("Customer confirmation email sent successfully");
 
         res.status(200).send("Emails sent successfully.");
     } catch (err) {
         console.error("Error in processing form submission:", err);
-        const errorDevMsg = {
-            from: process.env.FROM_EMAIL,
-            to: process.env.DEV_EMAIL,  // Your developer email address
-            subject: 'Form Submission Error - MpDecals USA',
-            html: `
-                <h1>Error in Form Submission</h1>
-                <p>An error occurred during a form submission process.</p>
-                <p>Error Details: ${err.message}</p>
-                `,
-            attachments: []  // Attachments if needed
-        };
-
-        transporter.sendMail(errorDevMsg, (error, info) => {
-            if (error) {
-                console.error("Error sending error notification to developer:", error);
-            } else {
-                console.log("Error notification sent to developer:", info.response);
-            }
-        });
+        try {
+            await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+                from: process.env.FROM_EMAIL,
+                to: [process.env.DEV_EMAIL],
+                subject: 'Form Submission Error - MpDecals USA',
+                html: `
+                    <h1>Error in Form Submission</h1>
+                    <p>An error occurred during a form submission process.</p>
+                    <p>Error Details: ${err.message}</p>
+                    `
+            });
+            console.log("Error notification sent to developer");
+        } catch (emailError) {
+            console.error("Error sending error notification to developer:", emailError);
+        }
 
         res.status(500).send("Error processing form submission.");    }
 });
