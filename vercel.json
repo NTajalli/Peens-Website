@@ -1,15 +1,10 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "dist/server/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
+  "functions": {
+    "dist/server/server.js": {
+      "maxDuration": 30
     }
-  ],
+  },
   "routes": [
     {
       "src": "/static/(.*)",
@@ -23,10 +18,5 @@
       "src": "/(.*)",
       "dest": "/dist/server/server.js"
     }
-  ],
-  "functions": {
-    "dist/server/server.js": {
-      "maxDuration": 30
-    }
-  }
+  ]
 } 
